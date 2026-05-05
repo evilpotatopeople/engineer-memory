@@ -4,5 +4,7 @@
 
 | Date | Type | Topic | File |
 |------|------|-------|------|
+| 2026-05-05 | investigation | DTC offer SKU × 客群分析升級 6 連 bug（schema 默契錯位 / 命名說謊 / canonical 不一致） | investigations/2026-05-05_offer_sku_segment_bug_chain.md |
+| 2026-05-05 | learning | DTC SKU × 客群升級 — 6 條工程教訓（schema 命名說謊 / JSON key 幻覺 / canonical 一致性 / v1→v2 遷移完整性） | learnings.md |
 | 2026-04-28 | learning | DTC suite spring2026 debug — 4 條工程教訓（silent fail / schema mismatch / filter inconsistency / 跨工具命名歧義） | learnings.md |
 | 2026-04-17 | idea | Threads 爬蟲架構（選 Apify+Supabase，pending actor 驗證） | ideas/2026-04-17_threads-scraper.md |
