@@ -5,6 +5,20 @@
 
 ---
 
+## 2026-05-05 / 給 user 解釋計算邏輯前必須驗證、不能憑記憶（self-errata）
+
+- **憑 spec comment 推論計算邏輯、誤導 user** — user 問「sheet 02 HERO 314 vs 乾糧-貓 505 的 191 差距怎來」、我看到 promo_analyzer.py 有「2026-04-29 spec #22 區分引流品 vs 主力品」comment、就回答「HERO 排除同單有引流品的 191 訂單」。實際上 #22 comment 指的是 sheet 02_分類總覽 而不是 HERO 件數階梯、HERO 真實邏輯是 `ex_buckets = {'試吃(30g)'}`、訂單只有試吃包才不算（191 訂單只有試吃、被排除）。同單有引流品的訂單（139 個）HERO 完全有算。下次：1) 給 user 解釋計算邏輯前、必須跑 simulation 驗證（python script reproduce 真實數字）、不能只看 comment 推論；2) 看到 spec comment 不確定 scope 時、先 grep 該 spec 在哪些函式被引用、再決定是不是這個 sheet 的邏輯；3) 用「我猜」「我估」這類詞時就是要驗證的訊號、不要寫進 user-facing 解釋；4) 這跟 2026-04-28 的 schema 命名說謊家族同類—都是「憑名字/comment 推論而沒看實際 code」。
+
+---
+
+## 2026-05-05 / DTC suite — brand_view mirror sync silent fail
+
+詳細：`investigations/2026-05-05_brand_view_sync_silent_fail.md`
+
+- **寫下游 xlsx 不等於 sync 完成、user 永遠看到舊 mirror** — `_shared/offer_behavior.py` 改完 sheet 04 顯示邏輯、跑完寫到 `dtc-promo-analyzer/outputs/`、但 `brand_view/{brand}/{market}/{campaign}/09_案型行為.xlsx` 是 `sync_brand_view.py` 透過 watch list 鏡像來的、`offer_behavior` 沒觸發 sync hook、user 開 brand_view 永遠舊版、誤以為「修法沒生效」。 root cause 是看 mtime 才發現（promo outputs 19:02 / brand_view 18:58）、code review 看不到。下次：1) 凡是寫下游檔案的 CLI、必須在結尾觸發所有 mirror 路徑（subprocess 跑 sync_brand_view update）；2) hook 失敗印 stderr、不 silent；3) hook 成功印「同步 N/M campaign」、確認跑了；4) 廣義「silent fail 家族」應該推動專案級規範—每個 producer 宣告 mirror 路徑、CI 驗證 mtime 不落後。
+
+---
+
 ## 2026-05-05 / DTC suite — offer SKU × 客群分析升級的 6 連 bug
 
 詳細：`investigations/2026-05-05_offer_sku_segment_bug_chain.md`
