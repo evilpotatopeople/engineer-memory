@@ -5,6 +5,15 @@
 
 ---
 
+## 2026-05-06 / 「靜默 try/except 吞 NameError」家族第二起 — cohort_analyzer sync hook
+
+詳細：根因跟 2026-04-28 「靜默 try/except 把 NameError 也吞掉」**一字不差**。教訓沒記住。
+
+- **同一個 silent fail 模式撞了第二次：try/except: pass + capture_output=True + 沒 import 的 module + NameError 全部吞掉** — `dtc-cohort-analyzer/analyze.py` 的 brand_view sync hook 用 `os.path.*` 但 module 沒 import os、`except Exception: pass` + `capture_output=True` 把 NameError 跟 stderr 全部吞掉。所有 user 跑 cohort_analyzer 都看到舊 brand_view mirror、不知道 hook 失效。Root cause 是 cohort 修 ladyn 寄倉 cohort（18→1485 客）後、user 開 brand_view 還看 19 客誤以為「修法沒生效」、實際是 mirror 沒同步。下次：1) 凡是用既有 Path import 不要再現場 `os.path` 拼路徑（教訓寫過、又犯）；2) hook 結尾**必須印 ✅ 成功訊息**、有 silent fail 看得到（教訓寫過、又犯）；3) 不要包 `Exception`、要包具名 exception 或印 stderr 不要 pass（教訓寫過、又犯）。**4) (新)：每次發現 silent fail 應該檢查同 codebase 還有沒有其他 hook 用同一個反 pattern**—我之前修了 promo_analyzer + offer_behavior 兩個 hook、沒掃 cohort_analyzer 也有同類 hook、漏修。
+- **silent fail 家族規範化**（推動專案級規範）：所有 producer 寫 outputs 後若有 sync hook、必須符合 4 條：(a) 用既有 Path 變數不現場拼 path、(b) capture_output=True 必須處理 returncode + 印 stderr、(c) 成功必須印 ✅ 訊息、(d) try/except 包具名 exception 或最少印 e。每加新 hook 跑 grep 確認其他 hook 也合規。
+
+---
+
 ## 2026-05-05 / 給 user 解釋計算邏輯前必須驗證、不能憑記憶（self-errata）
 
 - **憑 spec comment 推論計算邏輯、誤導 user** — user 問「sheet 02 HERO 314 vs 乾糧-貓 505 的 191 差距怎來」、我看到 promo_analyzer.py 有「2026-04-29 spec #22 區分引流品 vs 主力品」comment、就回答「HERO 排除同單有引流品的 191 訂單」。實際上 #22 comment 指的是 sheet 02_分類總覽 而不是 HERO 件數階梯、HERO 真實邏輯是 `ex_buckets = {'試吃(30g)'}`、訂單只有試吃包才不算（191 訂單只有試吃、被排除）。同單有引流品的訂單（139 個）HERO 完全有算。下次：1) 給 user 解釋計算邏輯前、必須跑 simulation 驗證（python script reproduce 真實數字）、不能只看 comment 推論；2) 看到 spec comment 不確定 scope 時、先 grep 該 spec 在哪些函式被引用、再決定是不是這個 sheet 的邏輯；3) 用「我猜」「我估」這類詞時就是要驗證的訊號、不要寫進 user-facing 解釋；4) 這跟 2026-04-28 的 schema 命名說謊家族同類—都是「憑名字/comment 推論而沒看實際 code」。
