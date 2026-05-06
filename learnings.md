@@ -5,6 +5,13 @@
 
 ---
 
+## 2026-05-06 / Schema 跨時代演進、修 keyword 要按時段掃 line items
+
+- **商業邏輯改了、SKU 命名跟著變、舊 keyword 失效但沒人發現** — ladyn 2024-07 以前寄倉是獨立 SKU 購買行為（line item 含「寄倉服務」）、2024-08 起店家把寄倉變成後端流程、line item 只剩主品 + 「寄倉好禮 - {贈品}」訂單 marker。我修 keyword 只看了 history CSV 全期 unique line items 排序前 50、抓到 1941 訂單就以為夠（涵蓋 2021-12~2024-07）、沒**按時段切片掃 line items 模式**、沒抓到 2024-08+ 還有 4797 寄倉訂單用新版 fingerprint。User 看 cohort 報表「寄倉只到 2024-07」才發現。下次：1) 修 fingerprint keyword 時、grep 結果**必須按 month 分組**看「每月命中數隨時間是否穩定」、突然歸 0 就是 schema 變更；2) 商業邏輯演進在 codebase 完全看不到、需要 user 先講或自己挖 line items 變化；3) v1 修法以為 1941 夠、實際是冰山一角、修 keyword 只能用「掃全期不會掉訂單」當完成標準。
+- **「寄倉好禮」keyword 跨「贈品 vs 真寄倉訂單 marker」雙重身份** — line item「寄倉好禮 - 沙發窩」本質是贈品 SKU、但**該 line item 出現在訂單 = 該訂單是寄倉訂單**。所以「寄倉好禮」既是贈品 marker、也是寄倉訂單 marker。對品類分類（line-item level）應歸贈品、但對寄倉客 cohort（order level）應算寄倉。修法：把「寄倉好禮」放進「寄倉」cat、不放進「寄倉-贈品」cat、順序排在贈品之前先抓走、cohort 命中正確（該客有該訂單 = 寄倉客）、營收計算稍微把「寄倉好禮」的 0 元贈品列為寄倉品類（無實質影響）。下次：1) line item 的「分類學意義」(贈品 / 主品) vs「業務意義」(訂單 marker / 客戶行為標記) 可能分歧、要看 cohort 設計目的選哪個；2) cohort_analyzer 端可以考慮加新 cohort 類型「`order_flag`」(訂單級 marker)、跟現有「`category`」(品類級) 並列、讓未來類似情況有更乾淨設計。
+
+---
+
 ## 2026-05-06 / 「靜默 try/except 吞 NameError」家族第二起 — cohort_analyzer sync hook
 
 詳細：根因跟 2026-04-28 「靜默 try/except 把 NameError 也吞掉」**一字不差**。教訓沒記住。

@@ -4,6 +4,7 @@
 
 | Date | Type | Topic | File |
 |------|------|-------|------|
+| 2026-05-06 | learning | Schema 跨時代演進、修 keyword 要按時段掃 line items（ladyn 寄倉 2024-08 換新版 fingerprint）；line item 雙重身份（贈品 vs 訂單 marker） | learnings.md |
 | 2026-05-06 | learning | 「silent try/except 吞 NameError」家族第 2 起 — cohort_analyzer sync hook 同 2026-04-28 一字不差、教訓沒記住、4 條規範化 | learnings.md |
 | 2026-05-05 | learning | self-errata：給 user 解釋計算邏輯前必須驗證、不能憑 spec comment 推論（HERO 314 vs 505 解釋錯誤） | learnings.md |
 | 2026-05-05 | investigation | DTC offer_behavior 寫完沒觸發 brand_view sync silent fail（user 看到舊 mirror、誤判修法沒生效） | investigations/2026-05-05_brand_view_sync_silent_fail.md |
