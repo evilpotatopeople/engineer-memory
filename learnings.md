@@ -5,6 +5,14 @@
 
 ---
 
+## 2026-05-21 / dtc-pre-campaign-planner — linear normalize 兩端都偏離、改 empirical（同日二度升級）
+
+- **SPEC 寫「可能」「大概」「預期」的部分就是要驗證的地方、不該停在「保守估、可接受」帶過去** — v2.1 ship linear normalize 時、SPEC §3.3.4 寫「實際 recall 可能 sub-linear、所以 linear 是保守估、可接受」、沒實際驗證。User 看到 618 報表後問「活動長短對召回率影響真的是線性嗎？」我才跑跨 86 檔 Day-N 累計分布實證、發現 linear 兩端都偏離：短 plan vs 長 ref（3d vs 8d）linear 預測 37.5% / 實證 42.9%（輕度低估）、長 ref 套短 plan（16d vs 8d）linear 預測 200% / 實證 ~100%（嚴重高估）。Spec 警告變真實 bug。下次：1) 寫 SPEC 假設條款時、把「未驗證點」明確標 `🟡 unverified` 或類似 marker、定期回頭跑實證；2) 「保守估」不能當完工狀態、要驗證「保守多少」、必要時用實證數字當 default；3) 同一個 spec section 寫完警告 + 跑實證 + 用實證結果改 default、應該是同一次 PR 而不是兩次 ship。
+- **跨檔期累計型 metric 的真實 scaling 通常 sub-linear、要從每個 ref 自己的曲線抽** — Day-N 累計分布跨 brand 差異不小：HK 客戶 D1-3 累計 ~50%（比 TW 高）、HK 16d ref D8 累計 53.7%（飽和很快）、TW 14d ref D8 累計 53.4%（也飽和）。**「跨 brand 一個統一公式」不對、要 per-ref 用該 ref 自己的曲線**。實作上、cohort 08x 表的 `每日新舊客趨勢` sheet 已經有所有歷史活動 daily 數據、可以即時讀。下次：1) 任何「歷史套到當下」的算法、要看「歷史那個指標可能是什麼曲線形狀」（線性 / sublinear / 飽和 / S-curve）、不該預設線性；2) 同類 spec 寫 normalize 公式前、要先跑跨檔實證確認曲線形狀；3) Per-ref 個別曲線 vs 跨 ref 統一曲線、優先用個別曲線（資料粒度更細）。
+- **「Default 是行為 spec、不是 fallback」** — v2.1 ship 時把 linear 設 default、v2.2 改 empirical default。兩次都是當前最好選擇變、default 跟著變。Default 反映「設計者目前認為哪個是對的」、不是 fallback。下次升級 default 不用怕 breaking change（短期看數字會變、但這是修正過去不夠好的選擇）、只要 SPEC + CHANGELOG 寫清楚、provide 舊行為的選項（'linear' / 'none'）讓有特殊需求的人能切回去。
+
+---
+
 ## 2026-05-21 / dtc-pre-campaign-planner — 短檔 vs 長檔 ref 業績虛高 ~3x
 
 - **planner 從 ref cohort 07 表讀的 `recall × avg_spend` 是「整檔（ref_days）累計」、套到 plan 沒乘 plan_days/ref_days、長檔等量套到短檔** — Lady N 618_2026（3 天短檔）references = summer2025 / spring2026（都是 8 天）、planner v2.0 算出 TW 中標 $1.77M、HK 中標 HKD 155K。User 直覺「3 天業績超高」要 sanity check、線性外推（歷史日均 $200K × 3 天）= $600K、偏誤 2.95×。Root cause：ref grid 的 recall（in_cnt / pre_n）和 avg_spend（in_rev / in_cnt）兩個都是 ref 整個活動期間（8 天）的總計、planner 在 estimate_revenue 裡 `cust_total += now_n * v['recall']` 直接套到 plan 池、等同假設「短檔強度 = 長檔等量」。下次：1) 凡是用 cohort 07 表的累計型欄位（recall / avg_spend / in_rev）跨「不同檔期天數」場景、**一律先想 plan_days vs ref_days 失配**；2) 累計型 metric vs 強度型 metric（per-day）要明確分開、變數命名 `recall_total` vs `recall_per_day` 不要混；3) cohort/promo 表新增任何「跨檔期套用」邏輯前、必加「天數對齊 check」。

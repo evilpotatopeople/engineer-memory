@@ -105,11 +105,28 @@ v2.1 ship：
 
 - [x] Spec §3.3.4 + changelog v2.1
 - [x] SESSION_LOG_2026-05-21.md
-- [x] learnings.md 追加（2026-05-21 三條）
+- [x] learnings.md 追加（2026-05-21 三條 v2.1 + 三條 v2.2）
 - [x] cognition_db ladyn_tw.principles_validated capture
-- [ ] 其他 brand plan config 重跑校準（heromama / lm / dcs）
-- [ ] 加 INTENSITY_MULTIPLIER knob（短檔強度補正）
-- [ ] 加自動 reality check（estimated daily vs historical daily 差 > 50% 印警告）
+- [x] 其他 brand plan config 重跑校準（13 個全跑完、全過 reality check）
+- [x] 加 INTENSITY_MULTIPLIER knob（短檔強度補正）
+- [x] 加自動 reality check（estimated daily vs historical daily 差 > 50% 印警告）
+- [x] 升級為 empirical normalize（v2.2、用 ref 自己的 08x 曲線當 scale）
+
+## 同日續：v2.2 升級為 empirical normalize
+
+User 在 v2.1 ship 後問「活動長短對召回率影響真的是線性嗎？」、跨 86 檔活動實證 Day-N 累計分布、發現 linear 兩端都偏離：
+- 短 plan vs 長 ref（3d vs 8d）：linear 37.5% / 實證 42.9% → linear 輕度低估
+- 長 ref 套短 plan（16d vs 8d）：linear 200% / 實證 ~100% → linear **嚴重高估**
+
+v2.2 解法：empirical mode（讀每個 ref 自己的 08x 日累計曲線當 scale）、改成 default。Lady N TW 618 從 v2.1 $664K → v2.2 $743K（+12%）；HK 618 +37%。
+
+詳見 SESSION_LOG_2026-05-21.md「同日續」section。
+
+## 衍生學習（v2.2 後追加）
+
+- **SPEC 寫「保守估、可接受」就是要驗證的地方**：v2.1 寫的 SPEC 警告變真實 bug、user 問才驗證。
+- **跨檔累計 metric 預設不是 linear**：HK D1-3 ~50% / TW D1-3 ~43% / 長檔嚴重飽和、需要 per-ref 個別曲線、不能跨 brand 統一公式。
+- **Default 反映設計選擇**：升級 default 不用怕短期數字 break（v2.1→v2.2 同日二度改 default、user OK 因為實證背書）。
 
 ## 與過去的關聯
 

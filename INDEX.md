@@ -4,8 +4,9 @@
 
 | Date | Type | Topic | File |
 |------|------|-------|------|
+| 2026-05-21 | learning | dtc-pre-campaign-planner v2.2 — SPEC 寫「保守估」不算完工要驗證 / 跨檔累計 metric 多是 sub-linear / Default 反映設計選擇不是 fallback | learnings.md |
 | 2026-05-21 | investigation | dtc-pre-campaign-planner 短檔 vs 長檔 ref 業績虛高 ~3x — 累計型 metric 跨檔期失配（v2.1 加 PLAN_DAYS_NORMALIZE） | investigations/2026-05-21_planner-days-mismatch.md |
-| 2026-05-21 | learning | dtc-pre-campaign-planner — 累計型 metric 跨檔期失配 / broken backward compat 是對的 / user 直覺 sanity check 是 last line of defense | learnings.md |
+| 2026-05-21 | learning | dtc-pre-campaign-planner v2.1 — 累計型 metric 跨檔期失配 / broken backward compat 是對的 / user 直覺 sanity check 是 last line of defense | learnings.md |
 | 2026-05-06 | learning | Schema 跨時代演進、修 keyword 要按時段掃 line items（ladyn 寄倉 2024-08 換新版 fingerprint）；line item 雙重身份（贈品 vs 訂單 marker） | learnings.md |
 | 2026-05-06 | learning | 「silent try/except 吞 NameError」家族第 2 起 — cohort_analyzer sync hook 同 2026-04-28 一字不差、教訓沒記住、4 條規範化 | learnings.md |
 | 2026-05-05 | learning | self-errata：給 user 解釋計算邏輯前必須驗證、不能憑 spec comment 推論（HERO 314 vs 505 解釋錯誤） | learnings.md |
