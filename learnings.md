@@ -5,6 +5,14 @@
 
 ---
 
+## 2026-05-21 / dtc-pre-campaign-planner — 短檔 vs 長檔 ref 業績虛高 ~3x
+
+- **planner 從 ref cohort 07 表讀的 `recall × avg_spend` 是「整檔（ref_days）累計」、套到 plan 沒乘 plan_days/ref_days、長檔等量套到短檔** — Lady N 618_2026（3 天短檔）references = summer2025 / spring2026（都是 8 天）、planner v2.0 算出 TW 中標 $1.77M、HK 中標 HKD 155K。User 直覺「3 天業績超高」要 sanity check、線性外推（歷史日均 $200K × 3 天）= $600K、偏誤 2.95×。Root cause：ref grid 的 recall（in_cnt / pre_n）和 avg_spend（in_rev / in_cnt）兩個都是 ref 整個活動期間（8 天）的總計、planner 在 estimate_revenue 裡 `cust_total += now_n * v['recall']` 直接套到 plan 池、等同假設「短檔強度 = 長檔等量」。下次：1) 凡是用 cohort 07 表的累計型欄位（recall / avg_spend / in_rev）跨「不同檔期天數」場景、**一律先想 plan_days vs ref_days 失配**；2) 累計型 metric vs 強度型 metric（per-day）要明確分開、變數命名 `recall_total` vs `recall_per_day` 不要混；3) cohort/promo 表新增任何「跨檔期套用」邏輯前、必加「天數對齊 check」。
+- **預設 normalize 為 'linear'、不為 'none'（broken backward compat 是對的）** — 修這個 bug 時面臨選擇：default 沿用舊行為（'none'）讓老 config 重跑數字不變、還是改 default 為 'linear' 讓修正成為預設？選後者。理由：1) 沿用舊行為 = 沒人會啟用修正、未來新 config 又踩坑；2) 含長檔 ref 的舊 config 重跑數字會變、但這是修正過去過估、不是 regression；3) 要等量套有明確需求、設 `'none'` 就好、不該當預設。下次遇到「修了個算法 bug 要不要 broken backward compat」、要區分「行為 bug fix」vs「介面 break」、行為 bug fix 應該破壞性更新、別讓向後相容性 trap user 繼續用錯邏輯。
+- **User 直覺 sanity check 是抓 algorithm bug 的 last line of defense** — 這個 bug 在 spec 寫得很清楚（v2.0 spec §3.3.1 確實沒提到天數）、driver 也寫過好幾個 plan config、報表也產出過正常數字、沒人發現。要不是 user 看到「3 天 $1.77M」覺得「直覺太高」要求拆解、bug 會一直存在。下次：1) 在跑出「跟過去歷史 magnitude 差異很大」的數字時、自己先做 sanity check（線性外推 vs planner 估算、差距 > 50% 就主動 flag）、不要等 user 發現；2) 算法輸出加自動 reality check（例：planner 業績估算 vs 歷史日均 × plan_days、差距 > 50% 印警告）。
+
+---
+
 ## 2026-05-06 / Schema 跨時代演進、修 keyword 要按時段掃 line items
 
 - **商業邏輯改了、SKU 命名跟著變、舊 keyword 失效但沒人發現** — ladyn 2024-07 以前寄倉是獨立 SKU 購買行為（line item 含「寄倉服務」）、2024-08 起店家把寄倉變成後端流程、line item 只剩主品 + 「寄倉好禮 - {贈品}」訂單 marker。我修 keyword 只看了 history CSV 全期 unique line items 排序前 50、抓到 1941 訂單就以為夠（涵蓋 2021-12~2024-07）、沒**按時段切片掃 line items 模式**、沒抓到 2024-08+ 還有 4797 寄倉訂單用新版 fingerprint。User 看 cohort 報表「寄倉只到 2024-07」才發現。下次：1) 修 fingerprint keyword 時、grep 結果**必須按 month 分組**看「每月命中數隨時間是否穩定」、突然歸 0 就是 schema 變更；2) 商業邏輯演進在 codebase 完全看不到、需要 user 先講或自己挖 line items 變化；3) v1 修法以為 1941 夠、實際是冰山一角、修 keyword 只能用「掃全期不會掉訂單」當完成標準。
