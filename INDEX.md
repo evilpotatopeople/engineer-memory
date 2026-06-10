@@ -4,6 +4,7 @@
 
 | Date | Type | Topic | File |
 |------|------|-------|------|
+| 2026-06-10 | plan | dtc-suite 修復→優化→擴充六階段 roadmap（P0 止血 / P1 架網 / P2 通訊出聲 / P3 規則統一 / P4 算法 / P5 擴充） | plans/eng/2026-06-10_dtc-suite-roadmap.md |
 | 2026-06-10 | review | dtc-campaign-analytics 全套件審計 — silent-fail hook 第3、4活體 / JSON 非 atomic / grid join 無覆蓋率檢查 / no_ref_data 診斷反向 | reviews/code/2026-06-10_dtc-suite-audit.md |
 | 2026-05-21 | learning | dtc-pre-campaign-planner v2.2 — SPEC 寫「保守估」不算完工要驗證 / 跨檔累計 metric 多是 sub-linear / Default 反映設計選擇不是 fallback | learnings.md |
 | 2026-05-21 | investigation | dtc-pre-campaign-planner 短檔 vs 長檔 ref 業績虛高 ~3x — 累計型 metric 跨檔期失配（v2.1 加 PLAN_DAYS_NORMALIZE） | investigations/2026-05-21_planner-days-mismatch.md |
