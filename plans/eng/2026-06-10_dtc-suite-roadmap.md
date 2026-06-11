@@ -6,6 +6,9 @@ Skill：roadmap 規劃（基於同日全套件審計 reviews/code/2026-06-10_dtc
 ## 摘要（一句話）
 六階段框架：止血（P0）→ 架網（P1）→ 通訊與出聲（P2）→ 規則統一（P3）→ 算法升級（P4）→ 價值擴充（P5）；核心邏輯是「先架網再動刀、出聲先於修對、規則只活在一個地方」，時程錨點是 618（6/11-6/18）與其復盤。
 
+## 進度快照（2026-06-11 P2 收官時）
+P0+P1+P2 全完成（兩天）：4 個止血修復、golden 三段鏈 179 值 + 機械掃描 + pre-commit、grid/pace sidecar + lineage 履歷。附帶：真 P0 一隻（promo 5 欄解包 crash）、HTML 蒸發案破案、磁碟 30GB→5.3GB。未動：P3 規則統一（7 月）、P4/P5、52 筆 pattern 債務在帳。
+
 ## 詳細內容
 
 ### 框架總邏輯（6 條原則）
@@ -115,7 +118,8 @@ Skill：roadmap 規劃（基於同日全套件審計 reviews/code/2026-06-10_dtc
 - [x] 磁碟瘦身（user 2026-06-11 核准）：30GB→5.3GB。.git 22GB→2.2MB（17 個 tmp_pack 殘骸 + reflog expire + gc --prune=now、正史 145 commits 不動）；bak 1.4GB→178MB（gzip、refresh_master_data 改自動 gzip 備份）；剩餘組成全正當（duckdb 2G / raw_orders 1.5G / outputs+brand_view ~1G）
 - [x] P2-2 pace 曲線改讀 pace_profile.json（xlsx fallback、io 來源印 console）✅ 2026-06-11：golden 全綠零更新（json/xlsx 同源 compute_pace_profile、curve 完全一致）；跨 CLI 位置解包讀取點全數消滅（grid+pace 都走 sidecar、xlsx 只剩 fallback）
 - [x] 案型 HTML 蒸發 root cause（user 回報）✅ 2026-06-11：recommender 預設寫 brand_view、cohort 每跑完自動 rebuild rmtree 洗掉、白名單只保 skill_output_*.md。修：MANUAL_PRESERVE_GLOBS 擴 6 patterns（案型推薦 xlsx/html、workflow_state.json、briefings、methodology_snapshot）+ 備份 read_text→read_bytes（二進位安全）；rebuild 實測 3 檔含 binary xlsx 全存活
-- [ ] P2-3 lineage 審計塊（每 CLI 結尾印 讀N/丟N+原因/覆蓋率/fallback 清單、寫進報表 banner）
+- [x] P2-3 lineage 審計塊 ✅ 2026-06-11：`_shared/lineage.py` 收集器；cohort/promo/planner 三個 ingest 全計帳（讀入/缺OID/日期解析失敗/重複/匿名排除/金額coerce）+ planner 折入 grid/pace io 與 join 覆蓋率；結尾印「資料履歷」塊 + planner 寫進報表 00_目錄 banner。golden 如預期只紅 00_目錄 dims 一項、其餘 178 值不動
+- **P2 收官（2026-06-11）**：機器介面（grid/pace sidecar）+ 異常出聲（lineage）全落地、xlsx 只剩 fallback 角色。下一站 P3 中央廚房（7 月）、P4 小塊可隨時插隊
 - [ ] P3 開工前重訪此檔、按當時現實調整
 
 ## 與過去的關聯
