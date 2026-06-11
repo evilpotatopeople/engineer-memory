@@ -112,6 +112,10 @@ Skill：roadmap 規劃（基於同日全套件審計 reviews/code/2026-06-10_dtc
 - [x] 順手修：refresh_master_data.py 加 .bak 保留上限 3 份（曾堆 133 檔/7.8GB）✅；既有舊檔清除待 user 確認
 - [ ] P1-1c（選配）：comparator/report golden + dcs 品牌 fixture（品類規則內嵌 dcs_base、值得鎖）
 - [ ] 跟 user 確認 $0 幽靈列是否已在餵入前清掉（影響 P3 view 設計）
+- [x] 磁碟瘦身（user 2026-06-11 核准）：30GB→5.3GB。.git 22GB→2.2MB（17 個 tmp_pack 殘骸 + reflog expire + gc --prune=now、正史 145 commits 不動）；bak 1.4GB→178MB（gzip、refresh_master_data 改自動 gzip 備份）；剩餘組成全正當（duckdb 2G / raw_orders 1.5G / outputs+brand_view ~1G）
+- [x] P2-2 pace 曲線改讀 pace_profile.json（xlsx fallback、io 來源印 console）✅ 2026-06-11：golden 全綠零更新（json/xlsx 同源 compute_pace_profile、curve 完全一致）；跨 CLI 位置解包讀取點全數消滅（grid+pace 都走 sidecar、xlsx 只剩 fallback）
+- [x] 案型 HTML 蒸發 root cause（user 回報）✅ 2026-06-11：recommender 預設寫 brand_view、cohort 每跑完自動 rebuild rmtree 洗掉、白名單只保 skill_output_*.md。修：MANUAL_PRESERVE_GLOBS 擴 6 patterns（案型推薦 xlsx/html、workflow_state.json、briefings、methodology_snapshot）+ 備份 read_text→read_bytes（二進位安全）；rebuild 實測 3 檔含 binary xlsx 全存活
+- [ ] P2-3 lineage 審計塊（每 CLI 結尾印 讀N/丟N+原因/覆蓋率/fallback 清單、寫進報表 banner）
 - [ ] P3 開工前重訪此檔、按當時現實調整
 
 ## 與過去的關聯
