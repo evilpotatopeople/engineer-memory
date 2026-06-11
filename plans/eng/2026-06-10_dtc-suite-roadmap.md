@@ -120,6 +120,9 @@ P0+P1+P2 全完成（兩天）：4 個止血修復、golden 三段鏈 179 值 + 
 - [x] 案型 HTML 蒸發 root cause（user 回報）✅ 2026-06-11：recommender 預設寫 brand_view、cohort 每跑完自動 rebuild rmtree 洗掉、白名單只保 skill_output_*.md。修：MANUAL_PRESERVE_GLOBS 擴 6 patterns（案型推薦 xlsx/html、workflow_state.json、briefings、methodology_snapshot）+ 備份 read_text→read_bytes（二進位安全）；rebuild 實測 3 檔含 binary xlsx 全存活
 - [x] P2-3 lineage 審計塊 ✅ 2026-06-11：`_shared/lineage.py` 收集器；cohort/promo/planner 三個 ingest 全計帳（讀入/缺OID/日期解析失敗/重複/匿名排除/金額coerce）+ planner 折入 grid/pace io 與 join 覆蓋率；結尾印「資料履歷」塊 + planner 寫進報表 00_目錄 banner。golden 如預期只紅 00_目錄 dims 一項、其餘 178 值不動
 - **P2 收官（2026-06-11）**：機器介面（grid/pace sidecar）+ 異常出聲（lineage）全落地、xlsx 只剩 fallback 角色。下一站 P3 中央廚房（7 月）、P4 小塊可隨時插隊
+- [x] P3a-1 規則對賬（2026-06-11）：DB 已有半個規則層（v_customer_orders 編 total>0+有客、chuancang_orders 編寄倉、product_dim 編贈品/品類、rich_line_items 編 canonical+包數）。Parity 探針 ladyn_tw：全部/retail 數字 CSV vs DB **完全一致**（98,184 / 64,759）；寄倉規則**分家 692 單**（DB 廣網 14,343 vs cohort 策展清單 13,651、DB 的 %寄倉% 連贈品 marker 也抓）；v_order_repurchase **無 gap>0 同日拆單規則**（known lesson 未進 DB、待 P3a-2 補）；line_items.category 全空、canonical category = product_dim join
+- [ ] P3a-2：rule_views_build.py（含 gap>0 回購修正）、寄倉 keyword per-brand 共用表（cohort config ↔ DB 單一源）、bucketing 共用模組、全品牌 parity harness
+- [ ] P3b（618 復盤後）：CLI 逐支切 views + comparator/report xlsx re-parse 退役；復盤舊新雙跑當驗收
 - [ ] P3 開工前重訪此檔、按當時現實調整
 
 ## 與過去的關聯
