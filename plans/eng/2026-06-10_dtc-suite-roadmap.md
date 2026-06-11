@@ -112,7 +112,9 @@ P0+P1+P2 全完成（兩天）：4 個止血修復、golden 三段鏈 179 值 + 
 
 **復盤週（6/19-20）**：618 復盤（P0-P2 後首次實戰、舊規則跑、產出 P3b 驗收基準）
 
-**復盤後（~7 月初）P3b 切換**：CLI 逐支改吃 views（golden 驗證、一次一支）、comparator/report xlsx re-parse 退役、618 復盤舊新雙跑 = 規則統一影響聲明（驗收報告）
+**P3b 拆 A/B 兩類（2026-06-11 user 追問後修訂）**：
+- P3b-A（語義不變、618 期間可做）：A1 bucketing 切換（cohort/planner 刪拷貝改 import、golden 零漂移驗證）、A2 comparator sheet05 字串比對→promo sidecar、A3 report 寄倉表位置讀取→sidecar
+- P3b-B（語義改變、復盤後）：cohort configs 改吃 warehouse_keywords（hm_tw 首次有寄倉 cohort、各品牌數字按定稿口徑移動）、dashboard 舊 views 退役；618 復盤舊新雙跑＝驗收聲明
 
 **P4 算法（小塊、可交錯插隊）**：P4-0 估算語義標註+「低中高」改名歷史類比帶+印 n_refs、P4-1 三方法並排+分歧旗標、P4-2 小格子 shrinkage（HK 解藥）、P4-3 校準表（pre vs actual、現成 6 檔）、P4-4 品類親和度維度
 
@@ -120,7 +122,7 @@ P0+P1+P2 全完成（兩天）：4 個止血修復、golden 三段鏈 179 值 + 
 
 **P5 擴充**：座標+信心標籤（可提前插隊）、檔期透支、ROAS 欄位+Meta API、TW/HK 準實驗、增量歸因（賴 P3b）、P5-6 成敗判準納毛利與廣告成本
 
-**已拍板（user 2026-06-11）**：✅ $0 政策——`total>0 AND 有客` 為全系統零售口徑（midflight 已首用、P3a-2 進 views）；✅ 寄倉口徑——策展清單為準、建 per-brand 共用表、692 單差異 P3a-2 逐 keyword 拆解後定稿
+**已拍板（user 2026-06-11）**：✅ $0 政策——`total>0 AND 有客` 為全系統零售口徑；✅ 寄倉口徑——per-brand 共用表 + **gift marker 證據力 = paid_only**（贈品 marker 僅有付款訂單算寄倉證據；主標記不分金額沿用 2026-05 裁決）。Canonical 寄倉數定稿：ladyn_tw 13,820 / dcs_tw 4,231（舊廣網 8,071 之灌水拆除）等、parity 8/8 驗證
 **已完成拍板**：commit baseline ✅ 2026-06-11（d5ab1e4 基建 + a9ebbd4 618 備戰既有變更、pre-commit 檢查兩輪通過）
 
 ## 後續動作
