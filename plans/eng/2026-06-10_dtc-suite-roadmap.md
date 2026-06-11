@@ -103,6 +103,26 @@ P0+P1+P2 全完成（兩天）：4 個止血修復、golden 三段鏈 179 值 + 
 ### 架構判定（2026-06-11、user 問「要不要重構」）
 **判決：不重構、走絞殺者演進（P1 網 → P2 介面 → P3 規則）。** 骨架五個決定是對的（CLI 算數/LLM 解讀分離、五 CLI 對應工作流、檔案資產+registry、本地零依賴、Excel 給人）。三個形變（單體 analyze.py、語意核心五拷貝、xlsx 機器介面）全用既有 roadmap 演進解。明確不做：整套重寫/換 pandas/換正式 DB——現有 code 內嵌數月踩坑的業務 edge case（寄倉雙重身份、schema 斷層、幽靈列），重寫＝全部重踩。重構觸發條件（到了再動）：品牌 >10 / 多人並行操作 / server 化。服務邏輯缺口：事中監測薄弱、校準迴路未閉合（P4-3）。
 
+## 推進清單 v2（2026-06-11 健檢整合後、取代下方散落的未完項）
+
+**本週（618 期間、全是加法）**
+1. [x] `midflight_check.py` 事中對照 ✅ 2026-06-11（commit 22e5839）：LIVE 掃描 / refs 日曲線中位 share / 零售口徑首個落地 / 新鮮度標註；回放驗證 spring2026 全程 -5% 帶內；hm summer D1 數字明早 10:35 起可看
+2. P3a-2：`rule_views_build.py`（含 v_order_repurchase 補 gap>0 同日拆單修正）、寄倉 keyword per-brand 共用表（cohort config ↔ DB 單一源）、bucketing 共用模組、全品牌 parity harness
+3. [x] `_sync_temp` 保留閥門 ✅ 2026-06-11（同 commit、7 天）
+
+**復盤週（6/19-20）**：618 復盤（P0-P2 後首次實戰、舊規則跑、產出 P3b 驗收基準）
+
+**復盤後（~7 月初）P3b 切換**：CLI 逐支改吃 views（golden 驗證、一次一支）、comparator/report xlsx re-parse 退役、618 復盤舊新雙跑 = 規則統一影響聲明（驗收報告）
+
+**P4 算法（小塊、可交錯插隊）**：P4-0 估算語義標註+「低中高」改名歷史類比帶+印 n_refs、P4-1 三方法並排+分歧旗標、P4-2 小格子 shrinkage（HK 解藥）、P4-3 校準表（pre vs actual、現成 6 檔）、P4-4 品類親和度維度
+
+**P4.5 [新]**：案型工作流摩擦小修——advance 改「偵測到 skill_output 檔自動推進」；大重構等用法穩定
+
+**P5 擴充**：座標+信心標籤（可提前插隊）、檔期透支、ROAS 欄位+Meta API、TW/HK 準實驗、增量歸因（賴 P3b）、P5-6 成敗判準納毛利與廣告成本
+
+**已拍板（user 2026-06-11）**：✅ $0 政策——`total>0 AND 有客` 為全系統零售口徑（midflight 已首用、P3a-2 進 views）；✅ 寄倉口徑——策展清單為準、建 per-brand 共用表、692 單差異 P3a-2 逐 keyword 拆解後定稿
+**已完成拍板**：commit baseline ✅ 2026-06-11（d5ab1e4 基建 + a9ebbd4 618 備戰既有變更、pre-commit 檢查兩輪通過）
+
 ## 後續動作
 - [x] P0-1：修兩個 silent hook（planner/comparator 換 promo 合規塊）✅ 2026-06-11
 - [x] P0-2：no_ref_data 反轉 + join 覆蓋率（estimate_revenue 回傳 join_coverage、main 印 ✓/⚠️）✅ 2026-06-11
