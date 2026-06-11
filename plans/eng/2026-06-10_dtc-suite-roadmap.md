@@ -107,8 +107,10 @@ Skill：roadmap 規劃（基於同日全套件審計 reviews/code/2026-06-10_dtc
 - [x] P0-4：load_config 加 _validate_plan_config（HK 沿用 TWD 桶 → SystemExit；逃生口 ALLOW_BASE_BUCKETS_FOR_HK）✅ 2026-06-11
 - P0 驗收：py_compile 10 檔 / atomic 模擬中斷原檔完好 / 合成資料覆蓋率 67% + miss 格正確標記 / HK guard 正反例全過 / 4 入口 import 健康（皆 PASS、未 commit）
 - [x] P1-1 golden test pilot（cohort × goldenx_tw）✅ 2026-06-11：`_shared/qa/`（make_fixture.py 確定性抽樣 / fixtures/goldenx_tw_history.csv 2191筆 / golden_check.py / golden 115 值）；隔離靠 DTC_CAMPAIGN_INDEX + DTC_SKIP_SYNC_HOOKS 兩個新環境開關 + goldenx 假品牌；驗收全過（確定性重跑 PASS / 破壞測試 DAYS_PER_MONTH 擾動→精準變紅→還原→綠）
-- [ ] P1-1b golden 擴到其餘 CLI（promo/planner）與其他品牌 fixture
-- [ ] P1-2 機械 audit ×2（hook 合規掃描、flat_rows 孤兒掃描）+ run_checks.sh
+- [x] P1-1b golden 三段鏈（cohort→promo→planner、共用 tmp index、179 鎖定值）✅ 2026-06-11；planner/promo 補 DTC_SKIP_SYNC_HOOKS guards。**上線首日抓到真 P0**：promo parse_orders 位置解包寫死 5 欄、inputs 已被同步管線重建成 10 欄 → 對正式檔案直接 crash（schema 跨時代家族）；已修成 DictReader header-aware
+- [x] P1-2 audit_patterns.py（bare except / exc+pass / capture 無 rc / flat_rows 孤兒；baseline 制、52 筆既有債務在帳、只擋新增）+ run_checks.sh（~3s）+ git pre-commit hook（SKIP_CHECKS=1 可跳）✅ 2026-06-11
+- [x] 順手修：refresh_master_data.py 加 .bak 保留上限 3 份（曾堆 133 檔/7.8GB）✅；既有舊檔清除待 user 確認
+- [ ] P1-1c（選配）：comparator/report golden + dcs 品牌 fixture（品類規則內嵌 dcs_base、值得鎖）
 - [ ] 跟 user 確認 $0 幽靈列是否已在餵入前清掉（影響 P3 view 設計）
 - [ ] P3 開工前重訪此檔、按當時現實調整
 
