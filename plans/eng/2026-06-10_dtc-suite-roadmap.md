@@ -1,7 +1,7 @@
 # dtc-campaign-analytics 修復→優化→擴充執行框架 — /plan-eng-review
 日期：2026-06-10
 Skill：roadmap 規劃（基於同日全套件審計 reviews/code/2026-06-10_dtc-suite-audit.md）
-狀態：進行中（P0 待執行）
+狀態：進行中（P0 已完成並驗收 2026-06-11、下一步 P1 golden tests）
 
 ## 摘要（一句話）
 六階段框架：止血（P0）→ 架網（P1）→ 通訊與出聲（P2）→ 規則統一（P3）→ 算法升級（P4）→ 價值擴充（P5）；核心邏輯是「先架網再動刀、出聲先於修對、規則只活在一個地方」，時程錨點是 618（6/11-6/18）與其復盤。
@@ -97,10 +97,18 @@ Skill：roadmap 規劃（基於同日全套件審計 reviews/code/2026-06-10_dtc
 - P4-4 品類親和度維度（RFM 格子內混品類客、對品類主打檔失準；中成本）
 - P5-6 判準擴充：成敗定義納入毛利與廣告成本（依賴 P5-3）
 
+### 架構判定（2026-06-11、user 問「要不要重構」）
+**判決：不重構、走絞殺者演進（P1 網 → P2 介面 → P3 規則）。** 骨架五個決定是對的（CLI 算數/LLM 解讀分離、五 CLI 對應工作流、檔案資產+registry、本地零依賴、Excel 給人）。三個形變（單體 analyze.py、語意核心五拷貝、xlsx 機器介面）全用既有 roadmap 演進解。明確不做：整套重寫/換 pandas/換正式 DB——現有 code 內嵌數月踩坑的業務 edge case（寄倉雙重身份、schema 斷層、幽靈列），重寫＝全部重踩。重構觸發條件（到了再動）：品牌 >10 / 多人並行操作 / server 化。服務邏輯缺口：事中監測薄弱、校準迴路未閉合（P4-3）。
+
 ## 後續動作
-- [ ] P0-1：修兩個 silent hook（第一塊、10 分鐘）
-- [ ] P0-2~4 依序
-- [ ] P1 golden tests 起步：先挑 ladyn_tw 一個品牌當 pilot
+- [x] P0-1：修兩個 silent hook（planner/comparator 換 promo 合規塊）✅ 2026-06-11
+- [x] P0-2：no_ref_data 反轉 + join 覆蓋率（estimate_revenue 回傳 join_coverage、main 印 ✓/⚠️）✅ 2026-06-11
+- [x] P0-3：_shared/atomic_io.py 新增、7 個寫入點全換 atomic_write_json ✅ 2026-06-11
+- [x] P0-4：load_config 加 _validate_plan_config（HK 沿用 TWD 桶 → SystemExit；逃生口 ALLOW_BASE_BUCKETS_FOR_HK）✅ 2026-06-11
+- P0 驗收：py_compile 10 檔 / atomic 模擬中斷原檔完好 / 合成資料覆蓋率 67% + miss 格正確標記 / HK guard 正反例全過 / 4 入口 import 健康（皆 PASS、未 commit）
+- [x] P1-1 golden test pilot（cohort × goldenx_tw）✅ 2026-06-11：`_shared/qa/`（make_fixture.py 確定性抽樣 / fixtures/goldenx_tw_history.csv 2191筆 / golden_check.py / golden 115 值）；隔離靠 DTC_CAMPAIGN_INDEX + DTC_SKIP_SYNC_HOOKS 兩個新環境開關 + goldenx 假品牌；驗收全過（確定性重跑 PASS / 破壞測試 DAYS_PER_MONTH 擾動→精準變紅→還原→綠）
+- [ ] P1-1b golden 擴到其餘 CLI（promo/planner）與其他品牌 fixture
+- [ ] P1-2 機械 audit ×2（hook 合規掃描、flat_rows 孤兒掃描）+ run_checks.sh
 - [ ] 跟 user 確認 $0 幽靈列是否已在餵入前清掉（影響 P3 view 設計）
 - [ ] P3 開工前重訪此檔、按當時現實調整
 
