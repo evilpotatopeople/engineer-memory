@@ -107,7 +107,7 @@ P0+P1+P2 全完成（兩天）：4 個止血修復、golden 三段鏈 179 值 + 
 
 **本週（618 期間、全是加法）**
 1. [x] `midflight_check.py` 事中對照 ✅ 2026-06-11（commit 22e5839）：LIVE 掃描 / refs 日曲線中位 share / 零售口徑首個落地 / 新鮮度標註；回放驗證 spring2026 全程 -5% 帶內；hm summer D1 數字明早 10:35 起可看
-2. P3a-2：`rule_views_build.py`（含 v_order_repurchase 補 gap>0 同日拆單修正）、寄倉 keyword per-brand 共用表（cohort config ↔ DB 單一源）、bucketing 共用模組、全品牌 parity harness
+2. [x] P3a-2 ✅ 2026-06-11：寄倉唯一源（692 單拆解＝全為贈品 marker、policy gift_implies_warehouse=true 待 user 終確認；dcs 污染清除、hm/lm 補變體）+ rule views（v_orders_retail/v_warehouse_orders/v_orders_day/v_repurchase_true；同日拆單假回購量化 21,984 筆、各品牌 1.7-4.1%）+ bucketing 模組（三方 1,052 點一致）+ parity 8/8 一筆不差（修時差假警報：窗口對齊 DB 涵蓋日；過程中順帶劇透 hm_tw 618 D1 凌晨 $212K/101 單）。**P3a 全部完成、P3b 材料備齊（drift 清單＝切換工作清單）**
 3. [x] `_sync_temp` 保留閥門 ✅ 2026-06-11（同 commit、7 天）
 
 **復盤週（6/19-20）**：618 復盤（P0-P2 後首次實戰、舊規則跑、產出 P3b 驗收基準）
