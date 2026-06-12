@@ -135,7 +135,7 @@ P0+P1+P2 全完成（兩天）：4 個止血修復、golden 三段鏈 179 值 + 
 
 **P4 算法（小塊、可交錯插隊）**：P4-0 估算語義標註+「低中高」改名歷史類比帶+印 n_refs、P4-1 三方法並排+分歧旗標、P4-2 小格子 shrinkage（HK 解藥）、P4-3 校準表（pre vs actual、現成 6 檔）、P4-4 品類親和度維度
 
-**復盤前空檔戰果（2026-06-12 ①②完成）**：[x] P5-1 歷史座標 ✅——post_report 新增 01b sheet（排名/分位/池退階/信心標籤、6/19 復盤即用）；[x] P1-1c golden 五段鏈 ✅——report+comparator 納入（195 鎖定值、digest 消費路徑迴歸保護、comparator hook 補 env guard）。③ P4-0 留待下一空檔
+**復盤前空檔戰果（2026-06-12 ①②完成）**：[x] P5-1 歷史座標 ✅——post_report 新增 01b sheet（排名/分位/池退階/信心標籤、6/19 復盤即用）；[x] P1-1c golden 五段鏈 ✅——report+comparator 納入（195 鎖定值、digest 消費路徑迴歸保護、comparator hook 補 env guard）。[x] ③ P4-0 ✅ 2026-06-12：估算語義標註——console ⓘ×2＋00目錄「估算語義」banner＋sheet03 desc；揭露 refs n/同tag加權樣本/取法（n<4＝min-median-max）/未納入（案型/投放/增量）/Method F 投放假設；index 欄位名不動（A類）。**復盤前空檔①②③全清**
 
 **P4.5 [新]**：案型工作流摩擦小修——advance 改「偵測到 skill_output 檔自動推進」；大重構等用法穩定
 
