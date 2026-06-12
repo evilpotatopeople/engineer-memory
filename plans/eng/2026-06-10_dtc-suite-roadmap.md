@@ -135,11 +135,13 @@ P0+P1+P2 全完成（兩天）：4 個止血修復、golden 三段鏈 179 值 + 
 
 **P4 算法（小塊、可交錯插隊）**：P4-0 估算語義標註+「低中高」改名歷史類比帶+印 n_refs、P4-1 三方法並排+分歧旗標、P4-2 小格子 shrinkage（HK 解藥）、P4-3 校準表（pre vs actual、現成 6 檔）、P4-4 品類親和度維度
 
-**復盤前空檔戰果（2026-06-12 ①②完成）**：[x] P5-1 歷史座標 ✅——post_report 新增 01b sheet（排名/分位/池退階/信心標籤、6/19 復盤即用）；[x] P1-1c golden 五段鏈 ✅——report+comparator 納入（195 鎖定值、digest 消費路徑迴歸保護、comparator hook 補 env guard）。[x] ③ P4-0 ✅ 2026-06-12：估算語義標註——console ⓘ×2＋00目錄「估算語義」banner＋sheet03 desc；揭露 refs n/同tag加權樣本/取法（n<4＝min-median-max）/未納入（案型/投放/增量）/Method F 投放假設；index 欄位名不動（A類）。**復盤前空檔①②③全清**
+**復盤前空檔戰果（2026-06-12 ①②完成）**：[x] P5-1 歷史座標 ✅——post_report 新增 01b sheet（排名/分位/池退階/信心標籤、6/19 復盤即用）；[x] P1-1c golden 五段鏈 ✅——report+comparator 納入（195 鎖定值、digest 消費路徑迴歸保護、comparator hook 補 env guard）。[x] ③ P4-0 ✅ 2026-06-12：估算語義標註——console ⓘ×2＋00目錄「估算語義」banner＋sheet03 desc；揭露 refs n/同tag加權樣本/取法（n<4＝min-median-max）/未納入（案型/投放/增量）/Method F 投放假設；index 欄位名不動（A類）。**復盤前空檔①②③全清**；[x] ⓐ 復盤 runbook 預舖 ✅ 2026-06-12：RUNBOOK_618_RETRO.md（前置檢查含⚠️重切全期 slices、六檔三步、六組 YoY、復盤後三連：舊尺快照→校準→P3b-B 雙跑）+ ladyn cohort 掛 618 + 12 configs 量產載入驗證；復盤日剩「按清單」、唯一外部依賴＝ladyn promo configs（user 6/16）
 
 **P4.5 [新]**：案型工作流摩擦小修——advance 改「偵測到 skill_output 檔自動推進」；大重構等用法穩定
 
 **P5 擴充**：座標+信心標籤（可提前插隊）、檔期透支、ROAS 欄位+Meta API、TW/HK 準實驗、增量歸因（賴 P3b）、P5-6 成敗判準納毛利與廣告成本
+
+**P7 案型智能（2026-06-12 user 問「發想＋歸納整合」、規劃佔位；前置＝P3b-B＋P4-3＋案型 metadata 補全）**：現況診斷＝發想半存在但斷鏈（LLM skills 吃通用知識、提案無量化試穿、學習迴路靠人腦）。設計：①案型 DSL（維度枚舉）②生成器（重組＋LLM 創意層）③審稿人（cognition_db failed 紅旗＋案型係數×planner 池＝情境估算帶＋贈品 budget 守門＋新穎度標籤）④提案帶證據等級（v/f/m/h 同構）→拍板→復盤回灌。階段：P7-1 案型係數表→P7-2 planner --scenario 情境帶（雙11 首戰）→P7-3 DSL+生成+審稿（先人肉 prototype）→P7-4 接 workflow。Caveats：每格 n=2-5 係數僅方向性、metadata 為硬前置、人拍板不退位
 
 **P6 自動化層（2026-06-11 user 問「能更自動化嗎」、規劃佔位；前置＝P3b 單一口徑）**：檔期排程器讀 index 自動驅動生命週期（D-7 planner / 檔期中每日 midflight / D+1 復盤全跑 / 每週 parity 巡檢 / 補資料自動重跑受影響 campaign）+ 通知通道（只在偏離/告警時找人）＝例外管理模式；人保留：案型/定價/目標拍板/洞察判定/復盤解讀。估 2-3 天。捷徑：midflight 每日 cron 一行、隨時可先上
 
