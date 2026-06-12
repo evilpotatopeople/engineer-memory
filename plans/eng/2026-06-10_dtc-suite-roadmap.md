@@ -113,7 +113,8 @@ P0+P1+P2 全完成（兩天）：4 個止血修復、golden 三段鏈 179 值 + 
 **復盤週（6/19-20）**：618 復盤（P0-P2 後首次實戰、舊規則跑、產出 P3b 驗收基準）
 
 **P3b 拆 A/B 兩類（2026-06-11 user 追問後修訂）**：
-- P3b-A（語義不變、618 期間可做）：A1 bucketing 切換（cohort/planner 刪拷貝改 import、golden 零漂移驗證）、A2 comparator sheet05 字串比對→promo sidecar、A3 report 寄倉表位置讀取→sidecar
+- P3b-A（語義不變、618 期間可做）：[x] A1 bucketing 切換 ✅ 2026-06-11（golden 179 零漂移；「對齊」從註解升級為同一份 code）；[ ] A2 comparator sheet05 字串比對→promo sidecar、[ ] A3 report 寄倉表位置讀取→sidecar
+- 事故記錄：A1 commit 時 add -A 誤蓋章 hm summer2026 skill_output ×2 的磁碟消失（消失時點未明、疑 rebuild 測試窗口）→ 即時從 git 還原（9d0ee5e）、全 brand_view 掃描無其他遺失、pre-commit 加受保護檔案刪除攔截（80f93e1）；教訓：不盲 add -A、先看 status
 - P3b-B（語義改變、復盤後）：cohort configs 改吃 warehouse_keywords（hm_tw 首次有寄倉 cohort、各品牌數字按定稿口徑移動）、dashboard 舊 views 退役；618 復盤舊新雙跑＝驗收聲明
 
 **P4 算法（小塊、可交錯插隊）**：P4-0 估算語義標註+「低中高」改名歷史類比帶+印 n_refs、P4-1 三方法並排+分歧旗標、P4-2 小格子 shrinkage（HK 解藥）、P4-3 校準表（pre vs actual、現成 6 檔）、P4-4 品類親和度維度
@@ -121,6 +122,8 @@ P0+P1+P2 全完成（兩天）：4 個止血修復、golden 三段鏈 179 值 + 
 **P4.5 [新]**：案型工作流摩擦小修——advance 改「偵測到 skill_output 檔自動推進」；大重構等用法穩定
 
 **P5 擴充**：座標+信心標籤（可提前插隊）、檔期透支、ROAS 欄位+Meta API、TW/HK 準實驗、增量歸因（賴 P3b）、P5-6 成敗判準納毛利與廣告成本
+
+**P6 自動化層（2026-06-11 user 問「能更自動化嗎」、規劃佔位；前置＝P3b 單一口徑）**：檔期排程器讀 index 自動驅動生命週期（D-7 planner / 檔期中每日 midflight / D+1 復盤全跑 / 每週 parity 巡檢 / 補資料自動重跑受影響 campaign）+ 通知通道（只在偏離/告警時找人）＝例外管理模式；人保留：案型/定價/目標拍板/洞察判定/復盤解讀。估 2-3 天。捷徑：midflight 每日 cron 一行、隨時可先上
 
 **已拍板（user 2026-06-11）**：✅ $0 政策——`total>0 AND 有客` 為全系統零售口徑；✅ 寄倉口徑——per-brand 共用表 + **gift marker 證據力 = paid_only**（贈品 marker 僅有付款訂單算寄倉證據；主標記不分金額沿用 2026-05 裁決）。Canonical 寄倉數定稿：ladyn_tw 13,820 / dcs_tw 4,231（舊廣網 8,071 之灌水拆除）等、parity 8/8 驗證
 **已完成拍板**：commit baseline ✅ 2026-06-11（d5ab1e4 基建 + a9ebbd4 618 備戰既有變更、pre-commit 檢查兩輪通過）
