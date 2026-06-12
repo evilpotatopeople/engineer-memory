@@ -129,7 +129,7 @@ P0+P1+P2 全完成（兩天）：4 個止血修復、golden 三段鏈 179 值 + 
 **復盤週（6/19-20）**：618 復盤（P0-P2 後首次實戰、舊規則跑、產出 P3b 驗收基準）
 
 **P3b 拆 A/B 兩類（2026-06-11 user 追問後修訂）**：
-- P3b-A（語義不變、618 期間可做）：[x] A1 bucketing 切換 ✅ 2026-06-11（golden 179 零漂移；「對齊」從註解升級為同一份 code）；[ ] A2 comparator sheet05 字串比對→promo sidecar、[ ] A3 report 寄倉表位置讀取→sidecar
+- P3b-A 全收官 ✅：A1 bucketing 切換（2026-06-11、golden 零漂移）；A2+A3 ✅ 2026-06-12——promo digest sidecar（add_sheet 單點攔截、05x/16/17/13 rows 原樣序列化、含 desc 列+補 None 同寬與 xlsx 逐位元同構）、comparator ×4 + report ×1 消費點 digest 優先/xlsx fallback；驗證＝逐格 parity + 五點雙路徑輸出全等。**附帶發現**：report 13 解析的既有行為會把「◆ 寄倉判定規則」註記列收成 {'total':0} 垃圾品類（兩路徑已忠實復刻）→ P3b-B 切換時順手修正 parser 跳過 ◆ 列
 - 事故記錄：A1 commit 時 add -A 誤蓋章 hm summer2026 skill_output ×2 的磁碟消失（消失時點未明、疑 rebuild 測試窗口）→ 即時從 git 還原（9d0ee5e）、全 brand_view 掃描無其他遺失、pre-commit 加受保護檔案刪除攔截（80f93e1）；教訓：不盲 add -A、先看 status
 - P3b-B（語義改變、復盤後）：cohort configs 改吃 warehouse_keywords（hm_tw 首次有寄倉 cohort、各品牌數字按定稿口徑移動）、dashboard 舊 views 退役；618 復盤舊新雙跑＝驗收聲明
 
