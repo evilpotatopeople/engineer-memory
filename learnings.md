@@ -5,6 +5,12 @@
 
 ---
 
+## 2026-06-25 / dtc-dashboard — 回購天數硬上限 365 散在 4 處 + 靜默丟棄
+
+- **同一個「限制值」散在多處硬寫、必然飄移成 bug** — dtc-dashboard 回購觀察天數上限 365 分別寫在 `app.py` 4 個地方（2 個 number_input `max_value`、2 個 text 驗證 `<= 365`）。使用者要看 > 1 年長週期回購、值被靜默丟掉、線不出現也不報錯。下次：任何「上限 / 門檻 / magic number」一出現第 2 次就抽成 module 常數（這次抽成 `MAX_OBS_WINDOW_DAYS`）、不要 copy-paste 數字。
+- **「靜默丟棄不合法輸入」是 UX bug、不是防呆** — text_input 填 540 被 `<= 365` 默默濾掉、沒有任何提示。使用者只會覺得「壞了」。下次：驗證失敗要嘛 inline warning、要嘛根本別讓使用者填（用有 max 的 widget）、不要中間態靜默吞掉。
+- **驗 threshold 類 bug 先全 codebase grep 那個數字** — 「超過 365 跑不出來」、grep `365` 全專案只有回購天數那 4 處、立刻排除「日期區間」嫌疑、根因 5 分鐘定位。下次遇到「超過某數就壞」的回報、第一步就 grep 那個數字、有沒有別處出現決定了範圍。
+
 ## 2026-05-21 / dtc-pre-campaign-planner — linear normalize 兩端都偏離、改 empirical（同日二度升級）
 
 - **SPEC 寫「可能」「大概」「預期」的部分就是要驗證的地方、不該停在「保守估、可接受」帶過去** — v2.1 ship linear normalize 時、SPEC §3.3.4 寫「實際 recall 可能 sub-linear、所以 linear 是保守估、可接受」、沒實際驗證。User 看到 618 報表後問「活動長短對召回率影響真的是線性嗎？」我才跑跨 86 檔 Day-N 累計分布實證、發現 linear 兩端都偏離：短 plan vs 長 ref（3d vs 8d）linear 預測 37.5% / 實證 42.9%（輕度低估）、長 ref 套短 plan（16d vs 8d）linear 預測 200% / 實證 ~100%（嚴重高估）。Spec 警告變真實 bug。下次：1) 寫 SPEC 假設條款時、把「未驗證點」明確標 `🟡 unverified` 或類似 marker、定期回頭跑實證；2) 「保守估」不能當完工狀態、要驗證「保守多少」、必要時用實證數字當 default；3) 同一個 spec section 寫完警告 + 跑實證 + 用實證結果改 default、應該是同一次 PR 而不是兩次 ship。
