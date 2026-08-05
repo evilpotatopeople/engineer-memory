@@ -4,6 +4,7 @@
 
 | Date | Type | Topic | File |
 |------|------|-------|------|
+| 2026-08-05 | idea | Mac Mini 自架伺服器 — 自費放家承接 dtc pipeline＋2-4 人 read-only dashboard、備份先行、部門級 AI 資料層 gate 公司認列 | ideas/2026-08-05_mac-mini自架伺服器.md |
 | 2026-06-25 | investigation | dtc-dashboard 回購觀察天數硬上限 365 散 4 處 + 靜默丟棄 → 收斂成 MAX_OBS_WINDOW_DAYS=1825 | investigations/2026-06-25_dtc-dashboard-回購天數卡365.md |
 | 2026-06-10 | plan | dtc-suite 修復→優化→擴充六階段 roadmap（P0 止血 / P1 架網 / P2 通訊出聲 / P3 規則統一 / P4 算法 / P5 擴充） | plans/eng/2026-06-10_dtc-suite-roadmap.md |
 | 2026-06-10 | review | dtc-campaign-analytics 全套件審計 — silent-fail hook 第3、4活體 / JSON 非 atomic / grid join 無覆蓋率檢查 / no_ref_data 診斷反向 | reviews/code/2026-06-10_dtc-suite-audit.md |
