@@ -5,6 +5,12 @@
 
 ---
 
+## 2026-08-06 / investigate — API 訂單數 vs 報表口徑差 6 萬
+
+- **Raw API 總數 ≠ 報表口徑、對不上先找口徑不是先判「對方錯」** — 同事 Claude 用 Metorik API 抓 HM TW 得 206,235、交接文件 146,537、就下結論「API 唯一權威、文件不可靠」。實測拆解：−14,731 取消/退款/待付款 −10,190 非 TW 出貨（混站期） −12,871 bacs/cheque −20,467 ToB 寄倉批發（881 帳號、最大單一帳號 14,746 筆＝全庫 7%） → 148,311、剛好是交接數＋快照後成長。兩個數字都對。下次：兩來源數字對不上、第一步是列出雙方口徑定義（status/國家/付款/role/金額）逐維度收斂、拍板口徑就寫在自家 `METORIK_SYNC_SPEC.md`。
+- **單維度驗證不能下全稱結論；「分解加總＝總數」是套套邏輯** — 同事只驗 status 一個維度（且用「各 status 加總＝總數」這種必然成立的檢查）就宣告「沒有規則可以找」；「兩 store 比值不同（71% vs 91%）→ 非系統性」也不成立——同一規則、不同市場結構（TW 寄倉批發多、HK 幾乎沒有）比值本來就不同。下次：驗「有沒有隱藏 filter」要拿候選 filter 逐一套用看能不能收斂到目標數、而不是驗 API 自己的內部一致性。
+- **Metorik /orders filter 三個坑** — pagination 無 total（要 binary search page 數）；`role` filter 在 orders 端無效（eq/neq 都回 0）；`customer_id in [...]` 超過 ~20 個值**靜默回空**不報錯。跨 store 打 API 前先做「已知子集」sanity test。
+
 ## 2026-06-25 / dtc-dashboard — 回購天數硬上限 365 散在 4 處 + 靜默丟棄
 
 - **同一個「限制值」散在多處硬寫、必然飄移成 bug** — dtc-dashboard 回購觀察天數上限 365 分別寫在 `app.py` 4 個地方（2 個 number_input `max_value`、2 個 text 驗證 `<= 365`）。使用者要看 > 1 年長週期回購、值被靜默丟掉、線不出現也不報錯。下次：任何「上限 / 門檻 / magic number」一出現第 2 次就抽成 module 常數（這次抽成 `MAX_OBS_WINDOW_DAYS`）、不要 copy-paste 數字。
