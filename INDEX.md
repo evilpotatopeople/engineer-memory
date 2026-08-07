@@ -4,6 +4,7 @@
 
 | Date | Type | Topic | File |
 |------|------|-------|------|
+| 2026-08-07 | investigation | dtc-dashboard-up 印不出 tunnel link — 固定 sleep 8s vs URL 配發 4~7s 的 race + 空結果靜默、重跑又殺掉快好的 tunnel；silent-fail 家族第 5 例 | investigations/2026-08-07_dashboard-up-no-link.md |
 | 2026-08-06 | investigation | HeroMama API 訂單 206K vs 交接 146K — 差 6 萬全是口徑（status/國家/付款/ToB 寄倉）、兩數字都對、API≠唯一權威 | investigations/2026-08-06_API訂單口徑差6萬.md |
 | 2026-08-05 | idea | Mac Mini 自架伺服器 — 自費放家承接 dtc pipeline＋2-4 人 read-only dashboard、備份先行、部門級 AI 資料層 gate 公司認列 | ideas/2026-08-05_mac-mini自架伺服器.md |
 | 2026-06-25 | investigation | dtc-dashboard 回購觀察天數硬上限 365 散 4 處 + 靜默丟棄 → 收斂成 MAX_OBS_WINDOW_DAYS=1825 | investigations/2026-06-25_dtc-dashboard-回購天數卡365.md |

@@ -5,6 +5,12 @@
 
 ---
 
+## 2026-08-07 / investigate — dtc-dashboard-up 印不出 link（silent-fail 家族 bash 版）
+
+- **「sleep N 秒再 grep 一次」不是同步機制、是賽跑** — dtc-dashboard-up 固定 `sleep 8` 後 grep cloudflared log 抓 trycloudflare URL、實測配發延遲 4~7 秒波動、>8 秒就空手。凡是等外部服務就緒、一律 poll loop（每秒查、上限 30-60 秒）、不要賭固定秒數。
+- **bash 的 `VAR=$(grep …|head -1)` 空結果照樣 exit 0、set -e 攔不到** — grep 沒中會被 pipeline 尾端 head 洗成 0、腳本繼續跑、印出空 URL 沒人知道失敗。關鍵變數取完要 `[ -z "$VAR" ]` 檢查 + 印 log 尾段報錯。silent-fail 家族第 5 例、python hook 的規範（成功印 ✅ / 失敗印 stderr）bash 腳本同樣適用。
+- **「服務叫不出來」先驗服務是不是真的死了** — 這次 streamlit + tunnel 全程活著（curl 200）、死的只是「印 link」那一步；使用者以為掛了重跑、pkill 又把快好的 tunnel 殺掉重排、越急越叫不出來。查「起不來」類 bug 第一步：ps + lsof + curl 分清「沒起來」vs「起來了但沒告訴你」。
+
 ## 2026-08-06 / investigate — API 訂單數 vs 報表口徑差 6 萬
 
 - **Raw API 總數 ≠ 報表口徑、對不上先找口徑不是先判「對方錯」** — 同事 Claude 用 Metorik API 抓 HM TW 得 206,235、交接文件 146,537、就下結論「API 唯一權威、文件不可靠」。實測拆解：−14,731 取消/退款/待付款 −10,190 非 TW 出貨（混站期） −12,871 bacs/cheque −20,467 ToB 寄倉批發（881 帳號、最大單一帳號 14,746 筆＝全庫 7%） → 148,311、剛好是交接數＋快照後成長。兩個數字都對。下次：兩來源數字對不上、第一步是列出雙方口徑定義（status/國家/付款/role/金額）逐維度收斂、拍板口徑就寫在自家 `METORIK_SYNC_SPEC.md`。
