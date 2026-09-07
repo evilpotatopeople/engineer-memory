@@ -5,6 +5,12 @@
 
 ---
 
+## 2026-09-07 / investigate — 回購結構圖顯示已下架品（全期彙總 vs 區間篩選）
+
+- **全期彙總的結構圖會被歷史主力洗掉、下架品在報表裡永遠活著** — dtc-dashboard「大家都回購什麼」固定算 2021-07 起全部訂單、卻放在有日期篩選的 tab 底下只靠 caption 提醒；晶球糧 2025-09 起 0 成交、爽肉泥 2025-11 起 0 成交，靠 2022–2024 的 50–80% 份額撐出 34%/20% 平線、user 以為分類壞了。下次：任何「結構／占比」區塊，要嘛跟側欄日期同步、要嘛標題直接寫「全期 2021-07 起」，不要只靠 caption。
+- **橫列全平就是「歷史平均」的訊號** — 第 1～10 單都是 34% 代表跨年平均、不是入手→回購遷移；按年拆才看得到真實曲線（2023 82% → 2026 0%）。看到全平的列先懷疑彙總範圍、不要解讀成「品項黏性穩定」。
+- **product_dim.status 是 dead field** — heromama 3,186 個 raw_name 全「在售」，因為 sku_master phase 1.5 的 `active` 全 True（列在 phase2_pending）。要分在售／下架得用資料推（最近 N 天有成交）、不能信這欄。附帶：`rich_line_items.品項` 值帶「category · 品項」前綴、查詢用短名會全空。
+
 ## 2026-08-07 / investigate — dtc-dashboard-up 印不出 link（silent-fail 家族 bash 版）
 
 - **「sleep N 秒再 grep 一次」不是同步機制、是賽跑** — dtc-dashboard-up 固定 `sleep 8` 後 grep cloudflared log 抓 trycloudflare URL、實測配發延遲 4~7 秒波動、>8 秒就空手。凡是等外部服務就緒、一律 poll loop（每秒查、上限 30-60 秒）、不要賭固定秒數。
