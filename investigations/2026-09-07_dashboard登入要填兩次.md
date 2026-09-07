@@ -36,6 +36,7 @@ Skill：/investigate
 - [x] `~/.cloudflared/config.yml` 加 `protocol: http2`（備份 `config.yml.bak-2026-09-07`）、kickstart 後 4 條連線全 http2、precheck 也建議 http2
 - [x] 殺掉殘留 quick tunnel pid 56399
 - [x] `tests/test_auth_token.py` 5 條（roundtrip／過期／換密碼／竄改與壞格式／token 形狀）
+- [x] 2026-09-08 追修：成功訊息「登入成功，dashboard 載入中…」原本靠下一輪 rerun 消失，但 dashboard 分頁全包 `@st.fragment`、互動只重跑分頁、外層元素永遠留著（user 回報「登入後一直顯示載入中」）。改成純 CSS：4.5 秒淡出、外層 stElementContainer 用 `:has()` 在 4.6 秒 display:none、不靠 rerun。測試機驗證：容器 display none／高 0（面板隱藏時 CSS 動畫不跑、用 Web Animations API finish() 快轉驗的）；正式機熱載入無 exception。
 - [ ] （另案）DuckDB 共用連線並發撞擊（14:18–14:22 十次 closed pending query result）
 - [ ] commit（user 還沒說要）
 
