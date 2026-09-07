@@ -4,7 +4,7 @@
 
 | Date | Type | Topic | File |
 |------|------|-------|------|
-| 2026-09-07 | investigation | dtc-dashboard 登入要填兩次、沒提示 — 密碼比對沒壞；WebSocket 穿 Cloudflare tunnel 一天斷 13 次、Streamlit 重連判 already connected 開新 session（上游 #8901）authed 歸零、死連線送出被前端靜默丟掉還清欄位、空密碼無回饋；修法待拍板（cookie 登入態＋四分支回饋＋藏 Enter 提示＋tunnel http2） | investigations/2026-09-07_dashboard登入要填兩次.md |
+| 2026-09-07 | investigation | dtc-dashboard 登入要填兩次、沒提示 — 密碼比對沒壞；WebSocket 穿 Cloudflare tunnel 一天斷 13 次、Streamlit 重連判 already connected 開新 session（上游 #8901）authed 歸零、死連線送出被前端靜默丟掉還清欄位、空密碼無回饋；同日修：cookie 登入態（HMAC 簽章 30 天、st.context.cookies 放行、續期）＋四分支回饋＋藏 Enter 提示＋tunnel 改 http2＋殺殘留 quick tunnel；坑：cookie iframe 放側欄在手機寬度不會執行、要放主畫面 | investigations/2026-09-07_dashboard登入要填兩次.md |
 | 2026-09-07 | investigation | dtc-dashboard 回購結構圖顯示已下架品（晶球糧/爽肉泥）— 不是分類錯、是區塊固定算全期訂單；同日修：加「側欄日期區間／全期」切換、預設同步側欄、欄標帶 n（repurchase_mix.py + tests）；product_dim.status 仍是 dead field | investigations/2026-09-07_回購結構圖顯示下架品.md |
 | 2026-09-03 | idea | skills 規格通用化可行性 — 已結案不執行：SKILL.md 已是開放標準（40 工具支援）、同事 Codex 生產實跑成立、缺口在跨模型驗收不在規格 | ideas/2026-09-03_skills規格通用化.md |
 | 2026-08-07 | investigation | dtc-dashboard-up 印不出 tunnel link — 固定 sleep 8s vs URL 配發 4~7s 的 race + 空結果靜默、重跑又殺掉快好的 tunnel；silent-fail 家族第 5 例 | investigations/2026-08-07_dashboard-up-no-link.md |

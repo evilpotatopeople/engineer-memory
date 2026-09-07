@@ -9,6 +9,7 @@
 
 - **Streamlit session_state 不是持久層、穿 tunnel/proxy 的登入態要落 cookie** — 瀏覽器一斷線重連、server 還沒發現舊 socket 死（ping 30s）就判「already connected」開新 session、`authed` 歸零（上游 #8901）；今天一天 13 次、一半跟 QUIC tunnel 抖動對得上、一半是瀏覽器端自己斷。任何靠 session_state 記登入的 Streamlit 頁面放到 tunnel 後面就會「隨機登出」。下次：登入態走簽章 cookie（`st.context.cookies` 讀、`components.html` 寫）、session_state 只當快取。
 - **「送出沒反應」先驗連線再驗邏輯；表單每條分支都要吭聲** — 前端斷線時送出只印 console 還照樣清欄位（clear_on_submit）、閘對空密碼不給訊息、成功只 toast 3 秒；三層都靜默、user 只看到「填對了也沒進去、再填一次就好」、還以為是密碼比對壞了。silent-fail 家族第 6 例。下次：空／錯／對／連線中四條分支都要有畫面訊息、會丟訊息的路徑別用 clear_on_submit。
+- **靠「畫出來才執行」的東西不能放 Streamlit 側欄** — cookie 寫入用 `components.html` 0 高 iframe，第一版塞在 `st.sidebar`；視窗窄（手機、瀏覽器面板縮小）時側欄整個不掛進 DOM、iframe 不載入、cookie 沒寫進去，主畫面同一段 code 就成功。iframe／自訂元件／任何 side-effect 元素一律放主畫面頂端。
 
 ## 2026-09-07 / investigate — 回購結構圖顯示已下架品（全期彙總 vs 區間篩選）
 
