@@ -5,6 +5,11 @@
 
 ---
 
+## 2026-09-07 / investigate — dtc-dashboard 登入要填兩次、沒提示（session 掉 + 三層靜默）
+
+- **Streamlit session_state 不是持久層、穿 tunnel/proxy 的登入態要落 cookie** — 瀏覽器一斷線重連、server 還沒發現舊 socket 死（ping 30s）就判「already connected」開新 session、`authed` 歸零（上游 #8901）；今天一天 13 次、一半跟 QUIC tunnel 抖動對得上、一半是瀏覽器端自己斷。任何靠 session_state 記登入的 Streamlit 頁面放到 tunnel 後面就會「隨機登出」。下次：登入態走簽章 cookie（`st.context.cookies` 讀、`components.html` 寫）、session_state 只當快取。
+- **「送出沒反應」先驗連線再驗邏輯；表單每條分支都要吭聲** — 前端斷線時送出只印 console 還照樣清欄位（clear_on_submit）、閘對空密碼不給訊息、成功只 toast 3 秒；三層都靜默、user 只看到「填對了也沒進去、再填一次就好」、還以為是密碼比對壞了。silent-fail 家族第 6 例。下次：空／錯／對／連線中四條分支都要有畫面訊息、會丟訊息的路徑別用 clear_on_submit。
+
 ## 2026-09-07 / investigate — 回購結構圖顯示已下架品（全期彙總 vs 區間篩選）
 
 - **全期彙總的結構圖會被歷史主力洗掉、下架品在報表裡永遠活著** — dtc-dashboard「大家都回購什麼」固定算 2021-07 起全部訂單、卻放在有日期篩選的 tab 底下只靠 caption 提醒；晶球糧 2025-09 起 0 成交、爽肉泥 2025-11 起 0 成交，靠 2022–2024 的 50–80% 份額撐出 34%/20% 平線、user 以為分類壞了。下次：任何「結構／占比」區塊，要嘛跟側欄日期同步、要嘛標題直接寫「全期 2021-07 起」，不要只靠 caption。
