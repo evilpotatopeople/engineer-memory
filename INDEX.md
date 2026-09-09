@@ -4,7 +4,7 @@
 
 | Date | Type | Topic | File |
 |------|------|-------|------|
-| 2026-09-09 | investigation | daily sync lm_tw 靜默缺一天 — 直接原因 partial 訊號只在 log 文字、Stage 1b cutoff today-2 與 freshness <2 天都抓不到「只缺昨天」；根因 pipeline 跑在會 clamshell 睡的日常 MBP、兩排程整晚只在 DarkWake 有進度（0 次 429、「搶 API」不成立）；決策：推進 A（套 worktree 未 commit 的 partial-fetch WIP ＋ partial→exit 3→Stage 1b/通知）、不做走速盤讓路、營運止血＝夜間插電不蓋蓋、歸入已拍板伺服器計畫 | investigations/2026-09-09_daily-sync-lm_tw-缺一天.md |
+| 2026-09-09 | investigation | daily sync lm_tw 靜默缺一天 — 直接原因 partial 訊號只在 log 文字、Stage 1b cutoff today-2 與 freshness <2 天都抓不到「只缺昨天」；根因 pipeline 跑在會 clamshell 睡的日常 MBP、兩排程整晚只在 DarkWake 有進度（0 次 429、「搶 API」不成立）；決策：推進 A（套 worktree 未 commit 的 partial-fetch WIP ＋ partial→exit 3→Stage 1b/通知）、不做走速盤讓路、營運止血＝夜間插電不蓋蓋、歸入已拍板伺服器計畫；**A 已落地 7f9fee8（9/2 WIP）＋ab13eac（partial→exit 3→Stage 1b retry／通知＋bash 模擬器 run_checks 5/5）＋d1f5651（縮窗不是 partial 訊號、aqua_hk 真實路徑 3 秒抓到誤報）、待 09-10 首跑驗收** | investigations/2026-09-09_daily-sync-lm_tw-缺一天.md |
 | 2026-09-07 | investigation | dtc-dashboard 登入要填兩次、沒提示 — 密碼比對沒壞；WebSocket 穿 Cloudflare tunnel 一天斷 13 次、Streamlit 重連判 already connected 開新 session（上游 #8901）authed 歸零、死連線送出被前端靜默丟掉還清欄位、空密碼無回饋；同日修：cookie 登入態（HMAC 簽章 30 天、st.context.cookies 放行、續期）＋四分支回饋＋藏 Enter 提示＋tunnel 改 http2＋殺殘留 quick tunnel；坑：cookie iframe 放側欄在手機寬度不會執行、要放主畫面 | investigations/2026-09-07_dashboard登入要填兩次.md |
 | 2026-09-07 | investigation | dtc-dashboard 回購結構圖顯示已下架品（晶球糧/爽肉泥）— 不是分類錯、是區塊固定算全期訂單；同日修：加「側欄日期區間／全期」切換、預設同步側欄、欄標帶 n（repurchase_mix.py + tests）；product_dim.status 仍是 dead field | investigations/2026-09-07_回購結構圖顯示下架品.md |
 | 2026-09-03 | idea | skills 規格通用化可行性 — 已結案不執行：SKILL.md 已是開放標準（40 工具支援）、同事 Codex 生產實跑成立、缺口在跨模型驗收不在規格 | ideas/2026-09-03_skills規格通用化.md |

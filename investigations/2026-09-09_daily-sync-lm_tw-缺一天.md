@@ -43,13 +43,22 @@ lm_tw 09-08 整天沒進 master／DuckDB 而 pipeline 回報綠燈：直接原�
 4. **策略層**：今天列為已拍板伺服器計畫 Phase 0/2 的事故證據；優先確認 Air 的 plist 狀態。
 5. **不做**：cutoff 改 today-1；共用 fetch 層重構；`caffeinate -i` 改 `-is`（對 clamshell／電池無效）。
 
+### 落地後真實路徑實測（12:01–12:04）：A-2 自己踩了同一個坑
+ab13eac 讓 `refresh_master_data` 在 `effective_restate_window` 縮窗時也 `report.mark(partial)`。用最小的店 aqua_hk 跑一次真的 `sync_orders.py --auto-merge --no-cohort`（跟 daily 同參數、冪等）：fetch **完整**（11 筆、`FetchOutcome.partial=False`）、只是 09-08 那天真的沒單 → CSV 最後一筆 09-07 < 窗尾 09-08 → 縮窗 → 被標 partial → **exit 3 誤報**。aqua_hk 近 60 天 37 天零單、這樣每兩天 Stage 1b 白 retry、桌面警告檔亂寫、通知列「不完整」——正是「日期分不出沒單和沒抓到」，從 refresh 這側鑽回來。WIP 的 docstring 其實寫了這個代價：「完整 fetch 但窗尾當天 0 單⋯8 店近期每日 ≥ 9 單、實務上不會發生」——09-07 aqua_hk（日均 0.6）上車後假設失效。
+
+修法 `d1f5651`：縮窗只是刪除安全閘（保守不刪、行為不變）、不再標 partial；partial 兩個來源＝fetcher `FetchOutcome`（權威、sync_orders 判）＋ 30% 守門（要刪 >30% 且 >20 筆、只可能是漏抓；稀疏店窗內不到 20 筆、天然不會誤觸）。測試 30 → 31（稀疏店窗尾沒單 → 0、一列不動）；aqua_hk 重跑 exit 0。
+
+教訓：unittest 31 綠＋bash 3.2 四情境模擬全綠、仍漏掉這個——因為 stub 的 fetcher 與 CSV 都是我設計的、沒有「完整 fetch 但最後一天沒單」這種真實世界的形狀。**最小真實店跑一次只要 3 秒、每次改 pipeline 都該做**。
+
 ## 後續動作
 - [x] A-1：2026-09-09 11:41 完成 — worktree patch（7 檔）＋測試檔收進 `feat/metorik-fetcher` **`7f9fee8`**；pre-commit 四段全綠（pattern audit／golden 200 鎖定值／drift 0／23 tests）；未 push、未 merge main。另一 session 同時段 commit 了 `823f6e2`（campaign_review 版面），無衝突
-- [ ] A-2：partial → exit 3（sync_orders／refresh_master_data；**不能用 2、argparse 參數錯誤已佔 2**）；sync_all_daily Stage 1 收 rc=3 進 partial[]、Stage 1b retry stale ∪ partial、通知列 partial 店；補測試
+- [x] A-2：2026-09-09 12:00 完成 — `ab13eac`（feat/metorik-fetcher、未 push、未 merge main）。exit code 契約 0/1/2/3；`MergeReport`（同 FetchOutcome pattern）；sync_orders 三個 return 點；sync_all_daily Stage 1 rc 分流 → Stage 1b retry 名單 = partial ∪ failed ∪ 日期 stale（去重、日期只當 backstop）→ retry 後重算兩名單 → freshness 併桌面檔 → 通知分列；「全 8 店」修掉。測試 23 → 30；新增 `_shared/qa/sim_sync_all_daily.sh`（/bin/bash 3.2、從真實檔 awk 抽函式、A/B/C/D 四情境）掛 run_checks 5/5——sync_all_daily.sh 第一個自動測試。pre-commit 五段全綠。**＋ `d1f5651`（12:04）修 A-2 自己的誤報**：縮窗不再標 partial（見下節）
+- [ ] **驗收 09-10 03:00 首跑**：`grep -E 'Stage 1b|partial|不完整|降級|完成' ~/Library/Logs/dtc-sync.log | tail -20` 要看到新標題「Stage 1b: retry 名單 = …」與結尾通知新格式；任一店 rc=3 就該出現「列入 Stage 1b retry」。若機器又睡、預期會看到 partial → retry 的實戰路徑
 - [ ] 營運：確認 pipeline 主機夜間供電與 lid 狀態；確認 Air 上 `launchctl list | grep dtc` 是否仍有 com.dtc.* / com.user.dtc-daily-sync（雙跑）
+- [ ] 可選：`effective_restate_window` docstring「8 店每日 ≥ 9 單、實務上不會發生」已失效（aqua_hk）、note 措辭「fetch 可能 partial」在 log 會誤導 → 改成「可能 partial、也可能該日沒單；以 FetchOutcome 為準」
 - [ ] 可選：runner round 層 wall-clock 上限
 - [ ] WIP 合進 main 後移除 `.claude/worktrees/infallible-matsumoto-5cdcb0`
-- [ ] cosmetic：sync_all_daily 訊息「全 8 店」→ 實際店數
+- [x] cosmetic：「全 8 店」→ `${#ALL_STORES[@]}`（隨 A-2 一起、ab13eac）
 
 ## 與過去的關聯
 - 2026-09-02 lm_tw restate 誤刪 8/31 尾段——同 trigger（DNS → partial）；那次的 task chip 就是這份 WIP。記錄在 Claude auto-memory `project_sync_restate_partial_fetch_deletes_rows`
