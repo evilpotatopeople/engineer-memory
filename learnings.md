@@ -5,6 +5,13 @@
 
 ---
 
+## 2026-09-09 / investigate — derived artifact 口徑漂移靜默走鐘（sidecar 無 provenance）
+
+- **守門的「指標選擇」決定它看得到哪一類錯；覆蓋率量不到 membership-space 漂移** — planner 的 grid join key 是 RFM 桶的標籤字串。桶定義改了（label-space）→ 標籤變 → join 全 miss → 覆蓋率塌 → 2026-06-11 建的 P0-2 守門會叫；但 `EXCLUDE_ZERO_TOTAL_ORDERS` 這類改的是「誰算數」、標籤一個字都沒變 → ladyn TW 客戶數只少 35 人、label 交集 366/467 格、覆蓋率 100%→99% 印綠色 ✓，實際上 **10.8%（4,508 人）換了格子、join「成功」但配到另一種口徑算的係數**，中標錯 28%。錯的不是 join miss，是 join 成功但配錯。下次：建守門時先問「這個指標對哪一類漂移敏感、對哪一類是盲的」，盲區要另外補指標，不要以為有守門就有覆蓋。silent-fail 家族第 8 例。
+- **derived artifact 一定要記自己是在哪組口徑下算的；否則 config 一改就是定時炸彈** — cohort 產的 sidecar 給 7 個 consumer 直讀，v1 格式的 `schema` 就是字串 `"grid.v1"`、`pace_profile.json` 連 schema 都沒有。`EXCLUDE_ZERO_TOTAL_ORDERS=True` 在 11:19 加進 config、sidecar 是 10:34 產的，中間 45 分鐘的落差沒有任何機制看得到。修法＝口徑指紋（`_shared/caliber_fingerprint.py`，7 欄序列化成 12 碼 sha、寫入 stamp、讀取 verify、不一致 hard fail 並逐欄指名）。下次：任何「A 產出、B 讀取」的中介檔，寫的時候就把決定語意的 config 欄位一起寫進去；新增旗標只要加進清單，所有 consumer 自動受保護。
+- **同一個口徑旗標在兩支 config 各宣告一次＝遲早不一致；要嘛繼承、要嘛稽核** — planner config 和 cohort config 各自寫 `EXCLUDE_ZERO_TOTAL_ORDERS`，靠人工抄。稽核腳本一掃就是 **11 支潛伏不一致**（ladyn 6、heromama 5，含未來檔期 `heromama_tw_plan_lunar2027`）。這些過去產出時是一致的，誰重跑誰中。下次：同一個語意不要在兩個地方各宣告一次；做不到就寫一支稽核腳本進 run_checks，讓不一致無法過夜。
+- **突變測試是「這條測試有沒有用」的唯一證明** — 寫完 regression test 全綠不代表它抓得到事故。把 `EXCLUDE_ZERO_TOTAL_ORDERS` 從 `CALIBER_FIELDS` 拿掉重跑 → 立刻紅（`CaliberMismatch not raised`），才確認測試真的鎖住那一刀。下次：任何為了某個事故寫的回歸測試，都要把修法退掉跑一次、看它變紅。
+
 ## 2026-09-09 / investigate — daily sync lm_tw 靜默缺一天（clamshell 睡眠 ＋ partial 訊號沒接線）
 
 - **排程器跟日常機同一台、蓋蓋子＝整條 pipeline 凍結；先看 pmset 再讀 log** — 09-09 兩支排程（03:00 sync、每小時走速盤）整晚只在每 15 分鐘 2–45 秒的 DarkWake 有進度，log 裡每個時間戳都對上一次 DarkWake；Connection reset／DNS 失敗是睡醒瞬間網路沒接回，不是 Metorik、也不是「兩 job 搶 API」（0 次 429）。`caffeinate -i` 只擋 idle、擋不了 clamshell；`subprocess.run(timeout=)` 用 monotonic clock、macOS 睡眠不走、1200 s 的 timeout 讓 24,778 s 的 build「成功」。下次：任何「夜間排程慢／斷／時間戳詭異」先 `pmset -g log | grep -E "Sleep|Wake"` 對時間再談程式問題；已拍板的專職伺服器計畫就是這條的根治。
