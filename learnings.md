@@ -5,6 +5,12 @@
 
 ---
 
+## 2026-09-09 / investigate — daily sync lm_tw 靜默缺一天（clamshell 睡眠 ＋ partial 訊號沒接線）
+
+- **排程器跟日常機同一台、蓋蓋子＝整條 pipeline 凍結；先看 pmset 再讀 log** — 09-09 兩支排程（03:00 sync、每小時走速盤）整晚只在每 15 分鐘 2–45 秒的 DarkWake 有進度，log 裡每個時間戳都對上一次 DarkWake；Connection reset／DNS 失敗是睡醒瞬間網路沒接回，不是 Metorik、也不是「兩 job 搶 API」（0 次 429）。`caffeinate -i` 只擋 idle、擋不了 clamshell；`subprocess.run(timeout=)` 用 monotonic clock、macOS 睡眠不走、1200 s 的 timeout 讓 24,778 s 的 build「成功」。下次：任何「夜間排程慢／斷／時間戳詭異」先 `pmset -g log | grep -E "Sleep|Wake"` 對時間再談程式問題；已拍板的專職伺服器計畫就是這條的根治。
+- **「已知的失敗」必須是結構化訊號一路傳到 retry 與通知；日期 heuristic 永遠分不出「沒單」和「沒抓到」** — fetcher 知道 Page 5 斷了、refresh_master_data 知道要刪 94.9% 不合理，兩層都只 print、都 exit 0；Stage 1b 用 today-2 推 stale、lm_tw 剛好卡在邊界、通知報「完成 11 店」。而 today-1 也不行：aqua_hk 近 60 天 37 天零單。下次：失敗事實產生的地方就要變成 exit code／marker，上層用訊號決定 retry 與降級通知；日期只當 backstop。silent-fail 家族第 7 例。順帶：9/2 事故的修法（FetchOutcome＋safe_restate_window＋23 測試）在 worktree 裡放了一週沒 commit——task chip 開出去的工要追到合併。
+- **診斷「A 拖慢 B」前先排除共同外因；grep 數字要帶語意邊界** — 看到走速盤結束後 sync 突然變快就斷定是搶 API，其實兩邊同時被 10:16 的 FullWake 解凍；grep "429" 抓到的 8 筆是 `429287`（dcs_tw 訂單數）。下次：兩個程序同時變快／變慢，先找第三個共同變數（電源、網路、機器狀態）；grep 狀態碼用 `"429 rate limit"` 這種帶語意的字串。
+
 ## 2026-09-07 / investigate — dtc-dashboard 登入要填兩次、沒提示（session 掉 + 三層靜默）
 
 - **Streamlit session_state 不是持久層、穿 tunnel/proxy 的登入態要落 cookie** — 瀏覽器一斷線重連、server 還沒發現舊 socket 死（ping 30s）就判「already connected」開新 session、`authed` 歸零（上游 #8901）；今天一天 13 次、一半跟 QUIC tunnel 抖動對得上、一半是瀏覽器端自己斷。任何靠 session_state 記登入的 Streamlit 頁面放到 tunnel 後面就會「隨機登出」。下次：登入態走簽章 cookie（`st.context.cookies` 讀、`components.html` 寫）、session_state 只當快取。
