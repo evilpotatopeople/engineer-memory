@@ -53,3 +53,14 @@ Claude Code 桌面版內建 Remote Control，開關打開就能從手機 App 或
 - `ideas/2026-08-05_mac-mini自架伺服器.md`：Premise 6 的紅線（個人基礎設施＋受控 pilot）沿用；該文件把雙跑當一次性遷移陷阱處理，本輪確認是常態風險。
 - `investigations/2026-09-09_daily-sync-lm_tw-缺一天.md`：同一個 clamshell sleep 根因的另一半。
 - 設計文件全文：`~/.gstack/projects/Claudetest/hsuyutong-main-design-20260921-012217.md`
+
+### 2026-09-21 補充：常駐主機已排程，階段 2 要重評估
+使用者表示 Air 扶正**近兩週內要跟組員一起建置**。這與階段 1 的閘門日幾乎重疊。
+
+若 Air 在閘門日前後上線，**階段 2（靜態頁＋Zero Trust）存在的最大理由就消失了**——主機不睡、tunnel 永遠通。屆時 **Approach B（Streamlit 手機優先頁）反而勝出**：~2 天 vs ~3-4 天、不用子網域／託管／ZT／token、**資料完全不離開本機**、`auth.py` 的閘自動套用。
+
+閘門日的判斷順序：先問「Air 上線了嗎」，再問「階段 1 閘門過了嗎」。兩者皆是 → 做 Approach B。
+
+另需連帶釐清：組員參與建置後，這台機器還算不算 2026-08-05 Premise 6 的「個人基礎設施」。屬伺服器專案範圍。
+
+帳本：agent-ledger **I-0028**（七則 office-hours 結論已記入）。
