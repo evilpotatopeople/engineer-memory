@@ -10,6 +10,11 @@ cp ~/Documents/engineer-memory/setup/engineer-memory-sync.sh ~/bin/engineer-memo
 chmod +x ~/bin/engineer-memory-sync.sh
 echo "✓ Installed ~/bin/engineer-memory-sync.sh"
 
+# 1b. 提交前的機密掃描器（business-memory-sync.sh 也用這一支）
+cp ~/Documents/engineer-memory/setup/memory-commit-scan.py ~/bin/memory-commit-scan.py
+chmod +x ~/bin/memory-commit-scan.py
+echo "✓ Installed ~/bin/memory-commit-scan.py"
+
 # 2. 確保 log 目錄存在
 mkdir -p ~/Library/Logs
 
