@@ -199,6 +199,8 @@ Skill：{gstack skill 名稱，例如 /retro}
 
 **不要兩個 skill 一起跑**。判斷不出時先問一句，不要硬猜。
 
+**新構想先進帳本**：要拷問一個還沒進帳本的構想時，先跑 `python3 /Users/hsuyutong/Desktop/agent-ledger/bin/hand idea new "<標題>" --detail "<原話>"` 拿編號，再開始拷問；談出結論就用 `hand idea note <編號> "<結論>"` 寫回。
+
 ---
 
 ## 五、不適用的情境（不要啟動 gstack skill）
