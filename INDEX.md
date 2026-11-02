@@ -4,6 +4,7 @@
 
 | Date | Type | Topic | File |
 |------|------|-------|------|
+| 2026-11-02 | investigation | Air 汪喵香港多 5 張經銷單 — 名單失敗照樣合併、重試窗口被推進後掃不回 | investigations/2026-11-02_經銷單混進Air汪喵香港.md |
 | 2026-10-30 | idea | DTC 分析庫與共用查詢入口 — 同事的 AI 不直接接 dtc.duckdb，每天另建無個資分析庫，獨立帳號 dtc-api＋Cloudflare 登入；設計待定案，上線要公司同意 | ideas/2026-10-30_分析庫與共用查詢.md |
 | 2026-10-30 | investigation | 汪喵雙11 第 14／15 天計畫＝0 — planner 07 照 Day N 硬對、ref 最長 13 天，11/10、11/11 沒樣本且高峰落在 11/3、11/9；改頭尾對齊＋中段補最低日（MAE 降 27–55%），開跑後用 reshape_pace_sheets.py 只重產 07／08、總量不動；D14／15 對照改 spec.ref_day 頭尾對齊（4c1c6f1） | investigations/2026-10-30_planner短ref每日形狀.md |
 | 2026-10-30 | investigation | 汪喵雙11走速盤案型表錯位 — 列是案型、數字是商品線（兩案型共線→整列相同；今日限定組合對錯線）；案型沒分市場（HK only 出現在台灣表）；券名正則是 Day 1 前猜的、回填沒做（滿額折吃到新會員／LINE／員購、HK 買1送2 吃到小宅包、TW/HK 門檻同一條正則）；已修並上線（4720d2e：改認券號、offer_markets、專屬商品線） | investigations/2026-10-30_走速盤案型表錯位.md |
