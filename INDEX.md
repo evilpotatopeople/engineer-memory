@@ -4,6 +4,8 @@
 
 | Date | Type | Topic | File |
 |------|------|-------|------|
+| 2026-11-03 | investigation | 怪獸雙11 Day 1 達標單數比去年多、總單卻少 — 不是算錯：去年 $1 限搶 159 單沒到 $699（今年 11），≥$699 多的 13 單全是寄倉（14 vs 1）；第 4 節加「未達」「其中寄倉」欄，寄倉是否排出口徑待定 | investigations/2026-11-03_lm雙11達標單數.md |
+| 2026-11-03 | plan-eng | dtc-data API 控管第一期 — 範圍縮小後 CLEAR，16 項全收、policy check --diff 當搬移安全閥 | plans/eng/2026-11-03_api-控管第一期.md |
 | 2026-11-03 | idea | dtc-data API 控管系統（三期、控管與執行分開） | ideas/2026-11-03_api-控管系統.md |
 | 2026-11-03 | investigation | Air 走速盤停在 10:14 — 03:00 daily 被契約擋、11:00 白天重跑 daily 拿著 dtc-sync.lock，runner 見鎖整輪跳過（rc=75），11:12／12:12 都沒發布；daily 結束不會補跑走速，等下一個 :12 | investigations/2026-11-03_Air走速盤落後.md |
 | 2026-11-02 | investigation | Air 汪喵香港多 5 張經銷單 — 名單失敗照樣合併、重試窗口被推進後掃不回 | investigations/2026-11-02_經銷單混進Air汪喵香港.md |
