@@ -4,6 +4,8 @@
 
 | Date | Type | Topic | File |
 |------|------|-------|------|
+| 2026-11-03 | idea | dtc-data API 控管系統（三期、控管與執行分開） | ideas/2026-11-03_api-控管系統.md |
+| 2026-11-03 | investigation | Air 走速盤停在 10:14 — 03:00 daily 被契約擋、11:00 白天重跑 daily 拿著 dtc-sync.lock，runner 見鎖整輪跳過（rc=75），11:12／12:12 都沒發布；daily 結束不會補跑走速，等下一個 :12 | investigations/2026-11-03_Air走速盤落後.md |
 | 2026-11-02 | investigation | Air 汪喵香港多 5 張經銷單 — 名單失敗照樣合併、重試窗口被推進後掃不回 | investigations/2026-11-02_經銷單混進Air汪喵香港.md |
 | 2026-10-30 | idea | DTC 分析庫與共用查詢入口 — 同事的 AI 不直接接 dtc.duckdb，每天另建無個資分析庫，獨立帳號 dtc-api＋Cloudflare 登入；設計待定案，上線要公司同意 | ideas/2026-10-30_分析庫與共用查詢.md |
 | 2026-10-30 | investigation | 汪喵雙11 第 14／15 天計畫＝0 — planner 07 照 Day N 硬對、ref 最長 13 天，11/10、11/11 沒樣本且高峰落在 11/3、11/9；改頭尾對齊＋中段補最低日（MAE 降 27–55%），開跑後用 reshape_pace_sheets.py 只重產 07／08、總量不動；D14／15 對照改 spec.ref_day 頭尾對齊（4c1c6f1） | investigations/2026-10-30_planner短ref每日形狀.md |
