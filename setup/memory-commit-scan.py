@@ -7,6 +7,8 @@
   - exit 2：掃描器自己壞了（載不到樣式、git 失敗），一樣不要提交
 1、2 第一次發生時在帳本開一件 --to human 的任務，hand status 的「要使用者本人處理的」看得到；
 同一批命中下一輪不再重開，恢復乾淨後清掉記錄，下次再擋才會再開。
+命中的檔若整個刪掉、工作區變乾淨，sync 腳本走「沒東西提交」那條，不會再叫一般掃描；
+所以那條改用 --clear-if-clean 叫它，一樣清掉記錄、把帳本任務結掉（帳本 T-0218-2-2）。
 
 掃什麼：git diff --cached 的新增行（就是這次會提交的內容）＋新增或改動的檔名。
   - 金鑰：直接載入已安裝帳本 bin/hand 的 SECRET_PATTERNS，不另寫一套
@@ -15,6 +17,7 @@
     確定沒問題的字串寫進 repo 根目錄的 .commit-scan-allow（一行一個）
 用法：memory-commit-scan.py <repo 名稱>             掃 index（sync 腳本用）
       memory-commit-scan.py <repo 名稱> --all --dry  掃所有已追蹤檔、不碰帳本（試誤判用）
+      memory-commit-scan.py <repo 名稱> --clear-if-clean  工作區沒東西提交時收掉先前的擋下（sync 腳本用）
 git@github.com、noreply 署名、這個 repo 的 git user.email 一律放行。
 """
 import hashlib
@@ -141,7 +144,7 @@ def alert(repo, title_reason, detail, key, dry):
     mark.write_text(json.dumps({"key": key, "task": task}))
 
 
-def clear(repo):
+def clear(repo, said="這次掃描乾淨、照常提交", why="下一輪排程重掃乾淨，已照常提交"):
     mark = STATE_DIR / ("%s.json" % repo)
     if not mark.exists():
         return
@@ -149,10 +152,26 @@ def clear(repo):
         task = json.loads(mark.read_text()).get("task")
     except (OSError, ValueError):
         task = None
-    print("%s %s 先前的擋下已解除，這次掃描乾淨、照常提交" % (time.strftime("%Y-%m-%d %H:%M"), repo))
+    print("%s %s 先前的擋下已解除，%s" % (time.strftime("%Y-%m-%d %H:%M"), repo, said))
     if task:
-        close_task(task, "下一輪排程重掃乾淨，已照常提交")
+        close_task(task, why)
     mark.unlink()
+
+
+def clear_if_clean(repo):
+    """sync 腳本在「工作區沒東西提交」那條呼叫：命中的檔整個刪掉之後，一般掃描不會再跑，由這裡收掉擋下。"""
+    if not (STATE_DIR / ("%s.json" % repo)).exists():
+        return 0  # 平常沒擋過：什麼都不做，也不載入帳本
+    try:
+        dirty = git("status", "--porcelain")
+    except Exception as e:  # 查不到就不動，下一輪再看；這裡沒東西要提交，不必開提醒
+        print("%s %s 查工作區失敗，先前的擋下這輪先不收：%s" % (time.strftime("%Y-%m-%d %H:%M"), repo, type(e).__name__))
+        return 0
+    if dirty:
+        return 0  # 還有待提交的改動：交給下一輪一般掃描，乾淨才由 clear() 收
+    clear(repo, "工作區已沒有待提交的改動（命中的檔已刪掉）",
+          "工作區已沒有待提交的改動（命中的檔已刪掉或已由人處理），排程不再被擋")
+    return 0
 
 
 def main():
@@ -160,6 +179,8 @@ def main():
         print(__doc__)
         return 2
     repo, full, dry = sys.argv[1], "--all" in sys.argv, "--dry" in sys.argv
+    if "--clear-if-clean" in sys.argv:
+        return clear_if_clean(repo)
     try:
         secret_pats = load_secret_patterns()
         allow_file = Path(".commit-scan-allow")

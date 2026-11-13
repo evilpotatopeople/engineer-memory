@@ -31,6 +31,9 @@ if [ -n "$(git status --porcelain)" ]; then
     exit 1
   fi
   git commit -m "auto: $(date '+%Y-%m-%d %H:%M')" > /dev/null
+elif [ -f "${SCAN}" ]; then
+  # 沒東西提交：命中的檔若整個刪掉，上面的掃描不會再跑，這裡讓掃描器把先前的擋下收掉（帳本 T-0218-2-2）
+  /usr/bin/python3 "${SCAN}" "${REPO_NAME}" --clear-if-clean
 fi
 
 if [ ! -f "${REMOTE}" ]; then
