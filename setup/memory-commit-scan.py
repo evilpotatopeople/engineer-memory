@@ -136,7 +136,7 @@ def alert(repo, title_reason, detail, key, dry):
     if r.returncode != 0:
         print("  帳本任務開不了（rc=%d）：%s" % (r.returncode, (r.stderr or r.stdout).strip()[:300]))
         return
-    m = re.search(r"T-\d{4}(-\d+)*", r.stdout)
+    m = re.search(r"T-L?\d{4}(-\d+)*", r.stdout)  # Air 的帳本編號是 T-L0001
     task = m.group(0) if m else ""
     print("  帳本：開了 %s 給使用者" % (task or r.stdout.strip()[:80]))
     if old.get("task"):
