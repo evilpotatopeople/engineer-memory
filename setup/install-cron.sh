@@ -15,6 +15,11 @@ cp ~/Documents/engineer-memory/setup/memory-commit-scan.py ~/bin/memory-commit-s
 chmod +x ~/bin/memory-commit-scan.py
 echo "✓ Installed ~/bin/memory-commit-scan.py"
 
+# 1c. 先拉再推、推不上去會報（帳本 T-0218-2；business-memory-sync.sh 也用這一支）
+cp ~/Documents/engineer-memory/setup/memory-sync-remote.py ~/bin/memory-sync-remote.py
+chmod +x ~/bin/memory-sync-remote.py
+echo "✓ Installed ~/bin/memory-sync-remote.py"
+
 # 2. 確保 log 目錄存在
 mkdir -p ~/Library/Logs
 

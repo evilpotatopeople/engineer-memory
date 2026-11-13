@@ -33,7 +33,7 @@
 
 ## 自動同步
 
-Mac 上每 30 分鐘 cron 會跑 `~/bin/engineer-memory-sync.sh`，把變更自動 commit + push 到這個 private repo。
+Mac 上每 30 分鐘 cron 會跑 `~/bin/engineer-memory-sync.sh`，把變更自動 commit，再先拉 GitHub 最新、後推到這個 private repo（兩台都在寫）。推不上去會寫進 `~/Library/Logs/engineer-memory-sync.log`；兩台改到同一段、或沒推的放超過 2 小時，會在 agent-ledger 開一件給使用者，補上後自己結案。
 
 ## 跟 business-memory 的分工
 
